@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from zipfile import ZipFile
 import pandas as pd
 import json
+import urllib
 # Download? (Skip to use an existing file)
 # Download and filter data
 end_date = datetime.today() - timedelta(days=int(input("timedelta: ")))
