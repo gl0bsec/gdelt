@@ -104,7 +104,7 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
         print("Invalid date format. Please use 'dd/mm/yyyy'.")
 
 # Example usage:
-output_file_path = 'gdelt_benin.json'
+output_file_path = 'gdelt_tkm.json'
 input_date = "26/12/2018"
 locations_regex = 'Turkmenistan'  # Adjust the regex pattern as needed
 themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
