@@ -100,16 +100,6 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
 
         print(f"Merged and filtered data saved to {output_file_path}")
 
-        # Delete individual filtered files and temporary directory
-        for day in past_dates + succeeding_dates:
-            day_str = day.replace("/", "")
-            temp_json_file = os.path.join(temp_dir, f'output_{day_str}.json')
-            if os.path.exists(temp_json_file):
-                os.remove(temp_json_file)
-        os.rmdir(temp_dir)
-
-        print("Individual filtered files deleted.")
-
     except ValueError:
         print("Invalid date format. Please use 'dd/mm/yyyy'.")
 
