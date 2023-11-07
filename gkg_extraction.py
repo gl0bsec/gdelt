@@ -8,7 +8,6 @@ import pandas as pd
 from datetime import datetime
 import json
 
-
 end_date = datetime.today() - timedelta(days=int(input("timedelta: ")))
 start_date = end_date - timedelta(days= int(input("how many days? ")))
 
@@ -22,24 +21,25 @@ def date_range(start, end):
 days = [str(day.strftime("%Y%m%d")) for day in date_range(start_date, end_date)]
 
 for day in days:
-    urllib.request.urlretrieve("http://data.gdeltproject.org/gkg/" + day + ".gkg.csv.zip", "gdelt_extraction/dump/" + "GEvents1" + day + ".zip",)
+    urllib.request.urlretrieve("http://data.gdeltproject.org/gkg/" + day + ".gkg.csv.zip", "dump/" + "GEvents1" + day + ".zip",)
     print("donwloaded "+"GEvents1" + day + ".zip")
     
 
 print("Unzipping files")
-test_dir = os.listdir("gdelt_extraction/dump")
+test_dir = os.listdir("dump")
 for n in test_dir:
-    with ZipFile("gdelt_extraction/dump/" + n, "r") as zipObj:
-        zipObj.extractall("gdelt_extraction/results")
+    with ZipFile("dump/" + n, "r") as zipObj:
+        zipObj.extractall("results")
 
-gdelt_extraction_dir = glob.glob("gdelt_extraction/dump/*")
+gdelt_extraction_dir = glob.glob("dump/*")
 for f in gdelt_extraction_dir:
     os.remove(f) 
     
-results_dir = os.listdir("gdelt_extraction/results")
+
+results_dir = os.listdir("results")
 for result in results_dir:
     print(result)
-    test = pd.read_csv('gdelt_extraction/results/'+result,delimiter="\t")
+    test = pd.read_csv('results/'+result,delimiter="\t")
     test.to_json('outputs/'+result[:8]+'.json', orient='records')
     print('saved '+result+" to outputs")   
 
@@ -64,11 +64,12 @@ with open(output_file_path, "w") as output_file:
 
 print(f"Merged data saved to {output_file_path}")
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # Load the dataset
-data = pd.read_json('test_.json', orient='records', lines=True)
-formatted_data = pd.json_normalize(data.iloc[0])
+# data = pd.read_json('test_.json', orient='records', lines=True)
+# formatted_data = pd.json_normalize(data.iloc[0])
 
 # Filter the dataset for migration and refugees related entries
-migration_refugee_data = formatted_data[formatted_data['THEMES'].str.contains('MIGRATION|REFUGEE', case=False, na=False, regex=True)]
-migration_refugee_data.to_csv("sample_migration_data2.csv", index=False)
+# migration_refugee_data = formatted_data[formatted_data['THEMES'].str.contains('MIGRATION|REFUGEE', case=False, na=False, regex=True)]
+# migration_refugee_data.to_csv("sample_migration_data2.csv", index=False)
+# %%

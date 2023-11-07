@@ -1,0 +1,276 @@
+Code,Score,Action 
+10.0,0.0,"Make statement, not specified below      "
+11.0,-0.1,Decline comment         
+12.0,-0.4,Make pessimistic comment        
+13.0,0.4,Make optimistic comment        
+14.0,0.0,Consider policy option        
+15.0,0.0,Acknowledge or claim responsibility       
+16.0,3.4,Make empathetic comment        
+17.0,0.0,Engage in symbolic act       
+18.0,3.4,Express accord         
+20.0,3.0,"Appeal, not specified below       "
+21.0,3.4,"Appeal for cooperation, not specified below     "
+22.0,3.4,Appeal for policy support       
+23.0,3.4,"Appeal for aid, not specified below     "
+24.0,-0.3,"Appeal for political reform, not specified below    "
+25.0,-0.3,Appeal to yield        
+26.0,4.0,Appeal to others to meet or negotiate    
+27.0,4.0,Appeal to others to settle dispute     
+28.0,4.0,Appeal to others to engage in mediation    
+30.0,4.0,"Express intent to cooperate, not specified below    "
+31.0,5.2,"Express intent to engage in material cooperation,  not specified below"
+32.0,4.5,Express intent to provide policy support     
+33.0,5.2,"Express intent to provide aid, not specified below   "
+34.0,7.0,"Express intent to bring political reform, not specified below  "
+35.0,7.0,"Express intent to yield, not specified below    "
+36.0,4.0,Express intent to meet or negotiate     
+37.0,5.0,Express intent to settle dispute      
+38.0,7.0,Express intent to accept mediation      
+39.0,5.0,Express intent to mediate       
+40.0,1.0,"Consult, not specified below       "
+41.0,1.0,Discuss by telephone        
+42.0,1.9,Make a visit        
+43.0,2.8,Host a visit        
+44.0,2.5,Meet at a â€œthirdâ€ location      
+45.0,5.0,Mediate          
+46.0,7.0,Engage in negotiation        
+50.0,3.5,"Engage in diplomatic cooperation, not specified below    "
+51.0,3.4,Praise or endorse        
+52.0,3.5,Defend verbally         
+53.0,3.8,Rally support on behalf of      
+54.0,6.0,Grant diplomatic recognition        
+55.0,7.0,Apologize          
+56.0,7.0,Forgive          
+57.0,8.0,Sign formal agreement        
+60.0,6.0,"Engage in material cooperation, not spec below    "
+61.0,6.4,Cooperate economically         
+62.0,7.4,Cooperate militarily         
+63.0,7.4,Engage in judicial cooperation       
+64.0,7.0,Share intelligence or information       
+70.0,7.0,"Provide aid, not specified below      "
+71.0,7.4,Provide economic aid        
+72.0,8.3,Provide military aid        
+73.0,7.4,Provide humanitarian aid        
+74.0,8.5,Provide military protection or peacekeeping      
+75.0,7.0,Grant asylum         
+80.0,5.0,"Yield, not specified below       "
+81.0,5.0,"Ease administrative sanctions, not specified below     "
+82.0,5.0,Ease popular protest        
+83.0,5.0,Accede to demands for political reform     
+84.0,7.0,"Return, release, not specified below      "
+85.0,7.0,"Ease economic sanctions, boycott, embargo      "
+86.0,9.0,Allow international involvement        
+87.0,9.0,De-escalate military engagement        
+90.0,-2.0,"Investigate, not specified below       "
+91.0,-2.0,"Investigate crime, corruption        "
+92.0,-2.0,Investigate human rights abuses       
+93.0,-2.0,Investigate military action        
+94.0,-2.0,Investigate war crimes        
+100.0,-5.0,"Demand, not specified below       "
+101.0,-5.0,"Demand information, investigation        "
+102.0,-5.0,Demand policy support        
+103.0,-5.0,"Demand aid, protection, or peacekeeping      "
+104.0,-5.0,"Demand political reform, not specified below     "
+105.0,-5.0,Demand mediation         
+106.0,-5.0,Demand withdrawal         
+107.0,-5.0,Demand ceasefire         
+108.0,-5.0,"Demand meeting, negotiation        "
+110.0,-2.0,"Disapprove, not specified below       "
+111.0,-2.0,Criticize or denounce        
+112.0,-2.0,"Accuse, not specified below       "
+113.0,-2.0,Rally opposition against        
+114.0,-2.0,Complain officially         
+115.0,-2.0,Bring lawsuit against        
+120.0,-4.0,"Reject, not specified below       "
+121.0,-4.0,"Reject proposal, not specified below      "
+122.0,-4.0,Reject request for material aid      
+123.0,-4.0,Reject demands for political reform      
+124.0,-5.0,"Reject proposal to meet, discuss, or negotiate    "
+125.0,-5.0,Reject mediation         
+126.0,-5.0,"Defy norms, law        "
+127.0,-5.0,"Reject accusation, deny responsibility       "
+128.0,-5.0,Veto          
+130.0,-4.4,"Threaten, not specified below       "
+131.0,-5.8,"Threaten non-force, not specified below      "
+132.0,-5.8,"Threaten with administrative sanctions, not specified below    "
+133.0,-5.8,Threaten collective dissent        
+134.0,-5.8,Threaten to halt negotiations       
+135.0,-5.8,Threaten to halt mediation       
+136.0,-7.0,Threaten to expel or withdraw peacekeepers     
+137.0,-7.0,Threaten with violent repression       
+138.0,-7.0,"Threaten to use military force, not specified below   "
+139.0,-7.0,Give ultimatum         
+140.0,-6.5,"Engage in popular protest, not specified below    "
+141.0,-6.5,Demonstrate or rally        
+142.0,-6.5,"Conduct hunger strike, not specified below     "
+143.0,-6.5,"Conduct strike or boycott, not specified below    "
+144.0,-7.5,"Obstruct passage, block        "
+145.0,-7.5,"Protest violently, riot        "
+150.0,-7.2,"Demonstrate military or police power, not specified below   "
+151.0,-7.2,Increase police alert status       
+152.0,-7.2,Increase military alert status       
+153.0,-7.2,Mobilize or increase police power      
+154.0,-7.2,Mobilize or increase armed forces      
+160.0,-4.0,"Reduce relations, not specified below      "
+161.0,-4.0,Reduce or break diplomatic relations      
+162.0,-5.6,"Reduce or stop aid, not specified below    "
+163.0,-6.5,Halt negotiations         
+164.0,-7.0,"Expel or withdraw, not specified below     "
+165.0,-7.0,Halt mediation         
+166.0,-8.0,"Impose embargo, boycott, or sanctions      "
+170.0,-7.0,"Coerce, not specified below       "
+171.0,-9.2,"Seize or damage property, not specified below    "
+172.0,-5.0,"Impose administrative sanctions, not specified below     "
+173.0,-5.0,"Arrest, detain, or charge with legal action    "
+174.0,-5.0,Expel or deport individuals       
+175.0,-9.0,Use violent repression        
+180.0,-9.0,"Use unconventional violence, not specified below     "
+181.0,-9.0,"Abduct, hijack, or take hostage      "
+182.0,-9.5,"Physically assault, not specified below      "
+183.0,-10.0,"Conduct suicide, car, or other non-military bombing, not spec below "
+184.0,-8.0,Use as human shield       
+185.0,-8.0,Attempt to assassinate        
+186.0,-10.0,Assassinate          
+190.0,-10.0,"Use conventional military force, not specified below    "
+191.0,-9.5,"Impose blockade, restrict movement       "
+192.0,-9.5,Occupy territory         
+193.0,-10.0,Fight with small arms and light weapons    
+194.0,-10.0,Fight with artillery and tanks      
+195.0,-10.0,Employ aerial weapons        
+196.0,-9.5,Violate ceasefire         
+200.0,-10.0,"Engage in unconventional mass violence, not specified below   "
+201.0,-9.5,Engage in mass expulsion       
+202.0,-10.0,Engage in mass killings       
+203.0,-10.0,Engage in ethnic cleansing       
+204.0,-10.0,"Use weapons of mass destruction, not specified below   "
+211.0,3.4,Appeal for diplomatic cooperation       
+212.0,3.4,Appeal for material cooperation       
+231.0,3.4,Appeal for economic aid       
+232.0,3.4,Appeal for military aid       
+233.0,3.4,Appeal for humanitarian aid       
+234.0,3.4,Appeal for military protection or peacekeeping     
+241.0,-0.3,Appeal for change in leadership      
+242.0,-0.3,Appeal for policy change       
+243.0,-0.3,Appeal for rights        
+244.0,-0.3,"Appeal for change in institutions, regime     "
+311.0,5.2,Express intent to cooperate economically      
+312.0,5.2,Express intent to cooperate militarily      
+331.0,5.2,Express intent to provide economic aid     
+332.0,5.2,Express intent to provide military aid     
+333.0,5.2,Express intent to provide humanitarian aid     
+334.0,6.0,Express intent to provide military protection or peacekeeping   
+341.0,7.0,Express intent to change leadership      
+342.0,7.0,Express intent to change policy      
+343.0,7.0,Express intent to provide rights      
+344.0,7.0,"Express intent to change institutions, regime     "
+351.0,7.0,Express intent to ease administrative sanctions     
+352.0,7.0,Express intent to stop protests      
+353.0,7.0,Express intent to accede to political demands    
+354.0,7.0,Express intent to release persons or property    
+355.0,7.0,"Express intent to ease economic sanctions, boycott, or embargo  "
+356.0,7.0,Express intent allow international involvement (not mediation)    
+357.0,7.0,Express intent to de-escalate military engagement     
+811.0,5.0,Ease restrictions on freedoms of speech and expression   
+812.0,5.0,Ease ban on political parties or politicians    
+813.0,5.0,Ease curfew         
+814.0,5.0,Ease state of emergency or martial law    
+831.0,5.0,Accede to demands for change in leadership    
+832.0,5.0,Accede to demands for change in policy    
+833.0,5.0,Accede to demands for rights      
+834.0,5.0,"Accede to demands for change in institutions, regime   "
+841.0,7.0,"Return, release person(s)        "
+842.0,7.0,"Return, release property        "
+861.0,9.0,Receive deployment of peacekeepers       
+862.0,9.0,Receive inspectors         
+863.0,9.0,Allow delivery of humanitarian aid      
+871.0,9.0,"Declare truce, ceasefire        "
+872.0,9.0,Ease military blocka[-2.0]de        
+873.0,9.0,Demobilize armed forces        
+874.0,10.0,Retreat or surrender militarily       
+1041.0,-5.0,Demand change in leadership       
+1042.0,-5.0,Demand policy change        
+1043.0,-5.0,Demand rights         
+1044.0,-5.0,"Demand change in institutions, regime      "
+1121.0,-2.0,"Accuse of crime, corruption       "
+1122.0,-2.0,Accuse of human rights abuses      
+1123.0,-2.0,Accuse of aggression        
+1124.0,-2.0,Accuse of war crimes       
+1125.0,-2.0,"Accuse of espionage, treason       "
+1211.0,-4.0,"Reject ceasefire, withdrawal        "
+1212.0,-4.0,Reject peacekeeping         
+1213.0,-4.0,Reject settlement         
+1231.0,-4.0,Reject demands for change in leadership     
+1232.0,-4.0,Reject demands for policy change      
+1233.0,-4.0,Reject demand for rights       
+1234.0,-4.0,"Reject demand change in institutions, regime     "
+1311.0,-5.8,Threaten to reduce or stop aid     
+1312.0,-5.8,"Threaten to boycott, embargo, or sanction     "
+1313.0,-5.8,Threaten to reduce or break relations     
+1321.0,-5.8,Threaten to impose restrictions on freedoms of speech and  
+1322.0,-5.8,Threaten to ban political parties or politicians    
+1323.0,-5.8,Threaten to impose curfew       
+1324.0,-5.8,Threaten to impose state of emergency or martial law  
+1381.0,-7.0,Threaten blockade         
+1382.0,-7.0,Threaten occupation         
+1383.0,-7.0,Threaten unconventional violence        
+1384.0,-7.0,Threaten conventional attack        
+1385.0,-7.0,Threaten attack with WMD       
+1411.0,-6.5,Demonstrate for change in leadership      
+1412.0,-6.5,Demonstrate for policy change       
+1413.0,-6.5,Demonstrate for rights        
+1414.0,-6.5,"Demonstrate for change in institutions, regime     "
+1421.0,-6.5,Conduct hunger strike for change in leadership    
+1422.0,-6.5,Conduct hunger strike for policy change     
+1423.0,-6.5,Conduct hunger strike for rights      
+1424.0,-6.5,"Conduct hunger strike for change in institutions, regime   "
+1431.0,-6.5,Conduct strike or boycott for change in leadership   
+1432.0,-6.5,Conduct strike or boycott for policy change    
+1433.0,-6.5,Conduct strike or boycott for rights     
+1434.0,-6.5,"Conduct strike or boycott for change in institutions, regime  "
+1441.0,-7.5,Obstruct passage to demand change in  leadership   
+1442.0,-7.5,Obstruct passage to demand policy change     
+1443.0,-7.5,Obstruct passage to demand rights      
+1444.0,-7.5,"Obstruct passage to demand change in institutions, regime   "
+1451.0,-7.5,Obstruct passage to demand change in  leadership   
+1452.0,-7.5,Obstruct passage to demand policy change     
+1453.0,-7.5,Obstruct passage to demand rights      
+1454.0,-7.5,"Obstruct passage to demand change in institutions, regime   "
+1621.0,-5.6,Reduce or stop economic assistance      
+1622.0,-5.6,Reduce or stop military assistance      
+1623.0,-5.6,Reduce or stop humanitarian assistance      
+1641.0,-7.0,Expel or withdraw peacekeepers       
+1642.0,-7.0,"Expel or withdraw inspectors, observers      "
+1643.0,-7.0,Expel or withdraw aid agencies      
+1711.0,-9.2,Confiscate property         
+1712.0,-9.2,Destroy property         
+1721.0,-5.0,Impose restrictions on freedoms of speech and expression   
+1722.0,-5.0,Ban political parties or politicians      
+1723.0,-5.0,Impose curfew         
+1724.0,-5.0,Impose state of emergency or martial law    
+1821.0,-9.0,Sexually assault         
+1822.0,-9.0,Torture          
+1823.0,-10.0,Kill by physical assault       
+1831.0,-10.0,Carry out suicide bombing       
+1832.0,-10.0,Carry out car bombing       
+1833.0,-10.0,Carry out roadside bombing       
+2041.0,-10.0,"Use chemical, biological, or radiologicalweapons      "
+2042.0,-10.0,Detonate nuclear weapons        
+,,
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          
+,,          

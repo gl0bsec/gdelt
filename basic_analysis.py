@@ -6,7 +6,6 @@ import matplotlib.style as style
 from collections import Counter
 import matplotlib.pyplot as plt
 from zipfile import ZipFile
-import matplotlib as plt
 import networkx as nx
 import seaborn as sns
 import pandas as pd
@@ -14,15 +13,15 @@ import numpy as np
 import json
 
 ## What Country: 
-country = 'Iran'
+country = 'Israel'
 country_list = []
 # Number of entities (for bar chat):
 N = 33
-csv_name = 'iran_data.csv'
+csv_name = 'stripconflict_data.csv'
 
 # Load Data 
 #%%
-file = 'gkg_30_days.json'
+file = 'test_.json'
 # Read data from JSON file
 with open(file, 'r') as f:
     data = json.load(f)
@@ -31,17 +30,19 @@ with open(file, 'r') as f:
 df = pd.DataFrame(data)
 
 ## country filtering?
-iran_df = df[df['LOCATIONS'].str.contains('Kosovo', case=False, na=False)].reset_index(drop=True)
-df = pd.DataFrame(data)
+filtered_df = df[df['LOCATIONS'].str.contains(country, case=False, na=False)].reset_index(drop=True)
+filtered_df = pd.DataFrame(data)
 
-gdelt_df = pd.read_csv('gdelt_iran.csv')
+#%% 
+filtered_df = pd.read_csv('stripconflict_data.csv')
 
 # Output to CSV?
-gdelt_df.to_csv(csv_name)
+filtered_df.to_csv(csv_name)
 
 # Data Viz 
 #%% 
 ## Assoc locations map
+import geopandas as gpd
 
 def filter_and_count_locations(df, country):
     """
@@ -74,7 +75,7 @@ def plot_minimalist_map(counter, title, color_map='Greens', power=0.5):
     plt.title(title, fontdict={'fontsize': 16})
     plt.show()
     
-plot_minimalist_map(filter_and_count_locations(df, 'Iran'), 'Countries associated with Iran', color_map='Greens', power=0.5)
+plot_minimalist_map(filter_and_count_locations(df, 'Israel'), 'Countries associated with Iran', color_map='Greens', power=0.5)
 
 #%% 
 # Themes, Orgs and Countries
@@ -126,29 +127,29 @@ def generate_visualizations(df, country_name, top_n):
     plt.title(f'Top {top_n} Organizations Related to {country_name}')
     plt.show()
     
-generate_visualizations(df, 'Iran', N-d)
+generate_visualizations(filtered_df, 'Israel', N-d)
 
 # Viz countries
 # Calculate the overall tone for each entry related to Iran
-gdelt_df['OVERALL_TONE'] = gdelt_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
+filtered_df['OVERALL_TONE'] = filtered_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
 
 # Calculate the overall tone for the entire dataset
-df['OVERALL_TONE'] = df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
+filtered_df['OVERALL_TONE'] = filtered_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
 
 ### Themes
-all_themes = ';'.join(gdelt_df['THEMES'].dropna()).split(';')
+all_themes = ';'.join(filtered_df['THEMES'].dropna()).split(';')
 theme_counter = Counter(all_themes)
 theme_names_20 = [theme[0] for theme in theme_counter.most_common(N-1) if theme[0] != '']
 theme_counts_20 = [theme[1] for theme in theme_counter.most_common(N-1) if theme[0] != '']
 theme_tones = {}
 for theme in theme_names_20:
-    theme_df = gdelt_df[gdelt_df['THEMES'].str.contains(theme, case=False, na=False)]
+    theme_df = filtered_df[filtered_df['THEMES'].str.contains(theme, case=False, na=False)]
     theme_tones[theme] = theme_df['OVERALL_TONE'].mean()
 theme_colors_reversed = [sns.color_palette("coolwarm_r", as_cmap=True)(0.5 + tone / 10) for tone in [theme[1] for theme in sorted(theme_tones.items(), key=lambda x: x[1])]]
 
 ### Countries
 country_tones = []
-for _, row in gdelt_df.iterrows():
+for _, row in filtered_df.iterrows():
     if pd.isna(row['LOCATIONS']) or pd.isna(row['OVERALL_TONE']):
         continue
     locations = row['LOCATIONS'].split(';')
@@ -178,7 +179,7 @@ plt.show()
 plt.figure(figsize=(15, 6))
 sns.histplot(df['OVERALL_TONE'], bins=50, color='gray', kde=True, label='All Data', alpha=0.5)
 ax2 = plt.twinx()
-sns.histplot(gdelt_df['OVERALL_TONE'], bins=50, color='salmon', kde=True, label='Iran Data', ax=ax2)
+sns.histplot(filtered_df['OVERALL_TONE'], bins=50, color='salmon', kde=True, label='Iran Data', ax=ax2)
 ax2.legend(loc='upper left')
 plt.legend(loc='upper right')
 plt.show()
@@ -209,7 +210,7 @@ def visualize_network_with_pyvis(df, col1, col2, title, scale_factor=1.0):
     net.show(title + ".html")
 
 # Load the dataset
-data = pd.read_csv('path_to_your_dataset.csv')
+data = pd.read_csv('stripconflict_data.csv')
 
 # Filter rows based on the presence of the theme 'TAX_FNCACT'
 tax_fncact_data = data[data['THEMES'].str.contains('TAX_FNCACT', na=False)]
@@ -285,13 +286,13 @@ def remove_blank_node(G):
     if '' in G:
         G.remove_node('')
 
-def plot_normalized_sized_network_graph(G, theme_counts, country, N, d):
+def plot_normalized_sized_network_graph(G, theme_counts, country, N):
     """Plot the network graph with normalized node sizing based on counts."""
     plt.figure(figsize=(18, 12), dpi=150)
     pos = nx.spring_layout(G, k=0.8, iterations=50)
     normalized_sizes = normalize_node_sizes_enhanced(theme_counts.nlargest(N))
     node_sizes = [normalized_sizes[theme] for theme in G.nodes()]
-    nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=generate_pastel_colors(N-d))
+    nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=generate_pastel_colors(N))
     nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold')
     nx.draw_networkx_edges(G, pos, alpha=0.5, width=0.5)
     plt.title(f'Normalized Sized Network Graph of Top {N} {var} for {country}', fontsize=16)
@@ -301,7 +302,7 @@ def plot_normalized_sized_network_graph(G, theme_counts, country, N, d):
 
 #%%
 # Net1:
-countries = ['Iran']
+countries = ['Israel']
 var = "THEMES"
 for country in countries:
     N = 30
@@ -309,7 +310,7 @@ for country in countries:
     top_themes = theme_counts.head(N).index
     G = generate_network_graph(df, top_themes, country,"THEMES")
     remove_blank_node(G)
-    plot_normalized_sized_network_graph(G, theme_counts, country, N, 1)
+    plot_normalized_sized_network_graph(G, theme_counts, country, N)
     
     
 #%%
@@ -358,14 +359,27 @@ def generate_network_graphs_for_theme(df, theme, top_n):
     draw_network_graph('PERSONS', person_counter, f"Top {top_n} Persons Associated with '{theme}' Theme", 'skyblue')
     draw_network_graph('ORGANIZATIONS', organization_counter, f"Top {top_n} Organizations Associated with '{theme}' Theme", 'lightgreen')
 
-generate_network_graphs_for_theme(gdelt_df, 'LEADER', 10)
+generate_network_graphs_for_theme(filtered_df, 'TAX_FNCACT', 10)
 
 #%%
+# Org graph
 # Usage:
-countries = ['Iran']
+countries = ['Israel']
 var = "ORGANIZATIONS"
 for country in countries:
-    N = 40
+    N = 30
+    theme_counts = get_theme_counts_by_country(df, country,var)
+    top_themes = theme_counts.head(N).index
+    G = generate_network_graph(df, top_themes, country,var)
+    remove_blank_node(G)
+    plot_normalized_sized_network_graph(G, theme_counts, country, N)
+    
+#%% 
+# Persons graph
+countries = ['Israel']
+var = "PERSONS"
+for country in countries:
+    N = 30
     theme_counts = get_theme_counts_by_country(df, country,var)
     top_themes = theme_counts.head(N).index
     G = generate_network_graph(df, top_themes, country,var)
@@ -393,7 +407,7 @@ def get_top_n_themes(df, n):
     for themes in df['THEMES'].str.split(';'):
         themes_counter.update(themes)
     top_n_themes = [item[0] for item in themes_counter.most_common(n)]
-    return top_n_themes
+    return top_n_themes[1:]
 
 def generate_heatmaps(df, top_n_themes):
     """
@@ -458,4 +472,88 @@ def main(file_path, n):
     generate_heatmaps(df, top_n_themes)
 
 # Example usage
-main('gdelt_iran.csv', 30)  # Replace '/path/to/your/dataset.csv' with the actual path and N with the number of top themes you want.
+main('gdelt_iran.csv', 20)  # Replace '/path/to/your/dataset.csv' with the actual path and N with the number of top themes you want.
+
+# %%
+def aggregate_theme_counts(df):
+    theme_date_dict = {}
+    for _, row in df.iterrows():
+        date = row['DATE']
+        themes = row['THEMES']
+        if date not in theme_date_dict:
+            theme_date_dict[date] = Counter()
+        theme_date_dict[date].update(themes)
+    return theme_date_dict
+
+def aggregate_theme_tone(df):
+    theme_tone_date_dict = {}
+    for _, row in df.iterrows():
+        date = row['DATE']
+        themes = row['THEMES']
+        avg_tone = float(str(row['TONE']).split(',')[0]) if pd.notnull(row['TONE']) else 0.0
+        if date not in theme_tone_date_dict:
+            theme_tone_date_dict[date] = Counter()
+        for theme in themes:
+            if theme not in theme_tone_date_dict[date]:
+                theme_tone_date_dict[date][theme] = {'sum_tone': 0.0, 'count': 0}
+            theme_tone_date_dict[date][theme]['sum_tone'] += avg_tone
+            theme_tone_date_dict[date][theme]['count'] += 1
+    return theme_tone_date_dict
+
+def plot_side_by_side_heatmaps(theme_counts_df, theme_tone_df, top_N_themes, date_labels):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(30, 10), sharey=True)
+    sns.heatmap(theme_counts_df.T, cmap='coolwarm', cbar=True, annot=False, ax=ax1)
+    ax1.set_title('Counts of Top 20 Themes Over Dates')
+    ax1.set_xlabel('Dates (Day-Month-Year)')
+    ax1.set_xticklabels(date_labels, rotation=45)
+    sns.heatmap(theme_tone_df.T, cmap='coolwarm', cbar=True, annot=False, ax=ax2)
+    ax2.set_title('Average Tone of Top 20 Themes Over Dates')
+    ax2.set_xlabel('Dates (Day-Month-Year)')
+    ax2.set_xticklabels(date_labels, rotation=45)
+    plt.suptitle('Side by Side Heatmaps of Theme Counts and Average Tone Over Dates')
+    plt.ylabel('Top 20 Themes')
+    plt.show()
+df = filtered_df
+# Read the CSV file
+filename ='stripconflict_data.csv'
+df = pd.read_csv(filename)
+
+# Convert the DATE column to a more readable date format
+df['DATE'] = pd.to_datetime(df['DATE'], format='%Y%m%d')
+
+# Clean up the THEMES column
+df['THEMES'] = df['THEMES'].apply(lambda x: str(x).split(';') if pd.notnull(x) else [])
+
+# Aggregate theme counts and tones
+theme_date_dict = aggregate_theme_counts(df)
+theme_tone_date_dict = aggregate_theme_tone(df)
+
+# Convert to DataFrames
+theme_counts_df = pd.DataFrame.from_dict({
+    date: theme_data for date, theme_data in theme_date_dict.items()
+}, orient='index').fillna(0)
+
+theme_tone_df = pd.DataFrame.from_dict({
+    date: {theme: data['sum_tone'] / data['count'] for theme, data in theme_data.items()}
+    for date, theme_data in theme_tone_date_dict.items()
+}, orient='index')
+
+# Filter out the specified themes and limit to top N themes
+themes_to_exclude = ["TAX_FNCACT", ""]
+theme_counts_df_filtered = theme_counts_df.drop(columns=themes_to_exclude, errors='ignore')
+theme_tone_df_filtered = theme_tone_df.drop(columns=themes_to_exclude, errors='ignore')
+
+N = 30
+top_N_themes = theme_counts_df_filtered.sum().sort_values(ascending=False).head(N).index.tolist()
+theme_counts_df_top_N = theme_counts_df_filtered[top_N_themes]
+theme_tone_df_top_N = theme_tone_df_filtered[top_N_themes]
+
+# Sort the DataFrames by date for better visualization
+theme_counts_df_top_N.sort_index(inplace=True)
+theme_tone_df_top_N.sort_index(inplace=True)
+
+# Generate example plot
+N = 30
+date_labels = theme_counts_df_top_N.index.strftime('%d-%m-%Y')
+plot_side_by_side_heatmaps(theme_counts_df_top_N, theme_tone_df_top_N, top_N_themes, date_labels)
+# %%
