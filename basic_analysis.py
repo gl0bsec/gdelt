@@ -30,14 +30,13 @@ with open(file, 'r') as f:
 df = pd.DataFrame(data)
 
 ## country filtering?
-filtered_df = df[df['LOCATIONS'].str.contains(country, case=False, na=False)].reset_index(drop=True)
-filtered_df = pd.DataFrame(data)
+# iran_df = df[df['LOCATIONS'].str.contains('Iran', case=False, na=False)].reset_index(drop=True)
+# df = pd.DataFrame(data)
 
-#%% 
-filtered_df = pd.read_csv('stripconflict_data.csv')
+iran_df = pd.read_csv('gdelt_iran.csv')
 
 # Output to CSV?
-filtered_df.to_csv(csv_name)
+iran_df.to_csv(csv_name)
 
 # Data Viz 
 #%% 
@@ -75,7 +74,8 @@ def plot_minimalist_map(counter, title, color_map='Greens', power=0.5):
     plt.title(title, fontdict={'fontsize': 16})
     plt.show()
     
-plot_minimalist_map(filter_and_count_locations(df, 'Israel'), 'Countries associated with Iran', color_map='Greens', power=0.5)
+plot_minimalist_map(filter_and_count_locations(df, 'Iran'), 'Countries associated with Iran', color_map='Greens', power=0.5)
+
 
 #%% 
 # Themes, Orgs and Countries
@@ -131,25 +131,25 @@ generate_visualizations(filtered_df, 'Israel', N-d)
 
 # Viz countries
 # Calculate the overall tone for each entry related to Iran
-filtered_df['OVERALL_TONE'] = filtered_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
+iran_df['OVERALL_TONE'] = iran_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
 
 # Calculate the overall tone for the entire dataset
 filtered_df['OVERALL_TONE'] = filtered_df['TONE'].apply(lambda x: float(x.split(',')[0]) if pd.notnull(x) else None)
 
 ### Themes
-all_themes = ';'.join(filtered_df['THEMES'].dropna()).split(';')
+all_themes = ';'.join(iran_df['THEMES'].dropna()).split(';')
 theme_counter = Counter(all_themes)
 theme_names_20 = [theme[0] for theme in theme_counter.most_common(N-1) if theme[0] != '']
 theme_counts_20 = [theme[1] for theme in theme_counter.most_common(N-1) if theme[0] != '']
 theme_tones = {}
 for theme in theme_names_20:
-    theme_df = filtered_df[filtered_df['THEMES'].str.contains(theme, case=False, na=False)]
+    theme_df = iran_df[iran_df['THEMES'].str.contains(theme, case=False, na=False)]
     theme_tones[theme] = theme_df['OVERALL_TONE'].mean()
 theme_colors_reversed = [sns.color_palette("coolwarm_r", as_cmap=True)(0.5 + tone / 10) for tone in [theme[1] for theme in sorted(theme_tones.items(), key=lambda x: x[1])]]
 
 ### Countries
 country_tones = []
-for _, row in filtered_df.iterrows():
+for _, row in iran_df.iterrows():
     if pd.isna(row['LOCATIONS']) or pd.isna(row['OVERALL_TONE']):
         continue
     locations = row['LOCATIONS'].split(';')
@@ -179,7 +179,7 @@ plt.show()
 plt.figure(figsize=(15, 6))
 sns.histplot(df['OVERALL_TONE'], bins=50, color='gray', kde=True, label='All Data', alpha=0.5)
 ax2 = plt.twinx()
-sns.histplot(filtered_df['OVERALL_TONE'], bins=50, color='salmon', kde=True, label='Iran Data', ax=ax2)
+sns.histplot(iran_df['OVERALL_TONE'], bins=50, color='salmon', kde=True, label='Iran Data', ax=ax2)
 ax2.legend(loc='upper left')
 plt.legend(loc='upper right')
 plt.show()
@@ -359,7 +359,7 @@ def generate_network_graphs_for_theme(df, theme, top_n):
     draw_network_graph('PERSONS', person_counter, f"Top {top_n} Persons Associated with '{theme}' Theme", 'skyblue')
     draw_network_graph('ORGANIZATIONS', organization_counter, f"Top {top_n} Organizations Associated with '{theme}' Theme", 'lightgreen')
 
-generate_network_graphs_for_theme(filtered_df, 'TAX_FNCACT', 10)
+generate_network_graphs_for_theme(iran_df, 'LEADER', 10)
 
 #%%
 # Org graph
