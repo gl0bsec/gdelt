@@ -1,23 +1,109 @@
-#%%
-from networkx.algorithms import community as nx_community
-from datetime import datetime, timedelta
-import matplotlib.style as style
-from collections import Counter
-import matplotlib.pyplot as plt
-from zipfile import ZipFile  
-import seaborn as sns
-from tqdm import tqdm
-import urllib.request
-import networkx as nx
+import streamlit as st
 import pandas as pd
-import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 import json
 import os
+import tempfile
+import urllib.request
+from collections import Counter
+import numpy as np
 
-filtered_df = pd.read_json('gdelt_mta.json')
-df = filtered_df
-# Themes, Orgs and Countries
+# Assuming the existence of these directories
+TEMP_JSON_DIR = tempfile.mkdtemp()
+GDELT_DATA_DIR = "gdelt_data"
+os.makedirs(GDELT_DATA_DIR, exist_ok=True)
 
+# Function to generate past and succeeding dates from a given date
+def gen_dates(input_date):
+    try:
+        # Parse the input date string into a datetime object
+        input_date = datetime.strptime(input_date, "%d/%m/%Y")
+        
+        # Initialize lists to store past and succeeding 15 days
+        past_dates = []
+        succeeding_dates = []
+
+        # Generate past dates
+        for i in range(15, 0, -1):
+            past_date = input_date - timedelta(days=i)
+            past_dates.append(past_date.strftime("%Y%m%d"))  # Format as yyyymmdd
+
+        # Generate succeeding dates
+        for i in range(1, 16):
+            succeeding_date = input_date + timedelta(days=i)
+            succeeding_dates.append(succeeding_date.strftime("%Y%m%d"))  # Format as yyyymmdd
+
+        return past_dates, succeeding_dates
+    except ValueError:
+        # Handle the case when the input date is not in the correct format
+        return [], []
+    
+
+# Function to download GDELT data
+def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, themes_regex):
+    try:
+        # Generate the date range using the input date
+        past_dates, succeeding_dates = gen_dates(input_date)
+
+        # Set the directory where the script is located as the working directory
+        script_directory = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(script_directory)
+
+        # Create an empty list to store the merged data
+        merged_data = []
+
+        # Create a directory to store temporary JSON files
+        temp_dir = "temp_json"
+        os.makedirs(temp_dir, exist_ok=True)
+
+        # Download, filter, and save GDELT data
+        for day in tqdm(past_dates + succeeding_dates, desc="Downloading GDELT data"):
+            # Download the file
+            day_str = day.replace("/", "")
+            url = "http://data.gdeltproject.org/gkg/" + day_str + ".gkg.csv.zip"
+            
+            urllib.request.urlretrieve(url, temp_dir+"/" + "GEvents1" + day_str + ".zip",)
+
+            # Extract the file
+            with ZipFile(temp_dir+"/" + "GEvents1" + day_str + ".zip", "r") as zipObj:
+                zipObj.extractall(temp_dir+"/")
+            os.remove(temp_dir+"/" + "GEvents1" + day_str + ".zip")
+
+            # Load the CSV data into a pandas DataFrame
+            df = pd.read_csv(temp_dir+"/" + day_str + ".gkg.csv", delimiter="\t")
+            
+            # Apply optional filters for themes using contains and regex
+            if themes_regex is not None:
+                df = df[df['THEMES'].str.contains(themes_regex, case=False, na=False, regex=True)]
+
+            # Apply optional filters for locations using contains and regex
+            if locations_regex is not None:
+                df = df[df['LOCATIONS'].str.contains(locations_regex, case=False, na=False, regex=True)]
+
+            # Save the filtered data as a temporary JSON file
+            temp_json_file = os.path.join(temp_dir, f'output_{day_str}.json')
+            df.to_json(temp_json_file, orient='records')
+            os.remove(temp_dir+"/" + day_str + ".gkg.csv")
+
+            # Append the data to the merged list
+            with open(temp_json_file, 'r') as json_file:
+                merged_data.extend(json.load(json_file))
+            os.remove(temp_json_file)  # Remove the temporary JSON file
+
+        # Save the merged and filtered data as a single JSON file
+        with open(output_file_path, "w") as output_file:
+            json.dump(merged_data, output_file)
+
+        print(f"Merged and filtered data saved to {output_file_path}")
+
+    except ValueError:
+        print("Invalid date format. Please use 'dd/mm/yyyy'.") 
+    return
+        
+
+# Function to generate visualizations
 def generate_visualizations(df, country_name, top_n):
     if country_name is None: 
         country_df = df 
@@ -97,7 +183,7 @@ def generate_visualizations(df, country_name, top_n):
     plt.show()
     
     return
-
+# Function to plot data from DataFrame
 def plot_from_dataframe(df, shade_date_str):
     # Process the DataFrame to calculate the number of entries per day
     df['Date'] = pd.to_datetime(df['DATE'], format='%Y%m%d')
@@ -141,9 +227,42 @@ def plot_from_dataframe(df, shade_date_str):
     # Show the plot
     plt.show()
 
-# Call the function with the DataFrame and a specified date to test it
 
-plot_from_dataframe(filtered_df, '20140606')
-generate_visualizations(filtered_df, None, 30)
+# Streamlit app main function
+def main():
+    st.title('GDELT Data Analysis and Visualization')
 
-# %%
+    # Sidebar for user inputs
+    st.sidebar.header('User Inputs')
+    input_date_str = st.sidebar.text_input('Enter date (dd/mm/yyyy)', '06/06/2014')
+    location_regex_input = st.sidebar.text_input('Location Regex (Optional)', '')
+    theme_regex_input = st.sidebar.text_input('Theme Regex (Optional)', '')
+    country_name_input = st.sidebar.text_input('Country Name for Visualization (Optional)', '')
+    top_n_input = st.sidebar.number_input('Top N items to visualize', 5, 100, 30)
+
+    # Button to download and filter data
+    if st.sidebar.button('Download and Filter GDELT Data'):
+        with st.spinner('Downloading and processing data...'):
+            try:
+                output_file_path = os.path.join(GDELT_DATA_DIR, 'gdelt_mta.json')
+                download_and_filter_gdelt_data(output_file_path, input_date_str, location_regex_input, theme_regex_input)
+                st.success('Data downloaded and filtered successfully!')
+            except Exception as e:
+                st.error(f'An error occurred: {e}')
+
+    # Load data and visualize
+    if st.sidebar.button('Load Data and Generate Visualizations'):
+        with st.spinner('Loading data and generating visualizations...'):
+            try:
+                filtered_df = pd.read_json(os.path.join(GDELT_DATA_DIR, 'gdelt_mta.json'))
+                # Generate and display visualizations
+                generate_visualizations(filtered_df, country_name_input, top_n_input)
+                # Plot from dataframe
+                plot_from_dataframe(filtered_df, input_date_str.replace('/', ''))
+                st.success('Visualizations generated successfully!')
+            except Exception as e:
+                st.error(f'An error occurred: {e}')
+
+# Run the main function
+if __name__ == "__main__":
+    main()
