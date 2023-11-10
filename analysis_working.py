@@ -146,4 +146,7 @@ def plot_from_dataframe(df, shade_date_str):
 plot_from_dataframe(filtered_df, '20140606')
 generate_visualizations(filtered_df, None, 30)
 
-# %%
+#%%
+
+
+

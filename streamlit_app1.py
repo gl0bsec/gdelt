@@ -9,6 +9,7 @@ import tempfile
 import urllib.request
 from collections import Counter
 import numpy as np
+import zipfile
 
 # Assuming the existence of these directories
 TEMP_JSON_DIR = tempfile.mkdtemp()
