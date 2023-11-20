@@ -78,9 +78,9 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
             # Load the CSV data into a pandas DataFrame
             df = pd.read_csv(temp_dir+"/" + day_str + ".gkg.csv", delimiter="\t")
             
-            # Apply optional filters for themes using contains and regex
-            if themes_regex is not None:
-                df = df[df['THEMES'].str.contains(themes_regex, case=False, na=False, regex=True)]
+            # # Apply optional filters for themes using contains and regex
+            # if themes_regex is not None:
+            #     df = df[df['THEMES'].str.contains(themes_regex, case=False, na=False, regex=True)]
 
             # Apply optional filters for locations using contains and regex
             if locations_regex is not None:
@@ -105,11 +105,13 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
     except ValueError:
         print("Invalid date format. Please use 'dd/mm/yyyy'.") 
     return
-        
+
+
 # Example usage:
-output_file_path = 'gdelt_mta.json'
-input_date = "06/06/2014"
-locations_regex = 'Malta'  # Adjust the regex pattern as needed
-themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
-download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, themes_regex)
+output_file_path = 'gdelt_ISR.json'
+input_date = "07/10/2023"
+locations_regex = 'Israel'  # Adjust the regex pattern as needed
+
+# themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
+download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
 # %%
