@@ -19,7 +19,7 @@ aw.plot_from_dataframe(filtered_df, '20140606')
 
 
     
-![png](test6/output_3_0.png)
+![png](test6_files/output_3_0.png)
     
 
 
@@ -39,7 +39,7 @@ aw.generate_visualizations(filtered_df, None, 30)
 
 
     
-![png](test6/output_5_1.png)
+![png](test6_files/output_5_1.png)
     
 
 
@@ -52,7 +52,7 @@ aw.generate_visualizations(filtered_df, None, 30)
 
 
     
-![png](test6/output_5_3.png)
+![png](test6_files/output_5_3.png)
     
 
 
@@ -65,7 +65,7 @@ aw.generate_visualizations(filtered_df, None, 30)
 
 
     
-![png](test6/output_5_5.png)
+![png](test6_files/output_5_5.png)
     
 
 
