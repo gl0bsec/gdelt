@@ -9,13 +9,15 @@ import nbformat
 from nbconvert import MarkdownExporter
 import sys
 from tqdm import tqdm  
+
 #%%
-# Import tqdm for progress bars
+# Set parameters
 output_file_path = 'gdelt_mlt.json'
 input_date = "06/06/2014"
 locations_regex = 'Malta'  # Adjust the regex pattern as needed
 
-
+#%% 
+#Download files 
 def gen_dates(input_date):
     try:
         # Parse the input date string into a datetime object
