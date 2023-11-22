@@ -119,7 +119,7 @@ locations_regex = 'Malta'  # Adjust the regex pattern as needed
 download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
 # %%
 
-def convert_notebook_to_md(notebook_path, output_dir,name):
+def convert_notebook_to_md(notebook_path, output_dir):
     """
     Convert a Jupyter Notebook to a Markdown file.
 
@@ -140,13 +140,13 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
         os.makedirs(output_dir)
 
     # Save the Markdown file
-    md_file_name = os.path.splitext(os.path.basename(notebook_path))[0] + '.md'
+    md_file_name = os.path.splitext(os.path.basename(name))[0] + '.md'
     md_file_path = os.path.join(output_dir, md_file_name)
     with open(md_file_path, 'w', encoding='utf-8') as f:
         f.write(body)
 
     # Save additional resources like images
-    resource_dir = os.path.join(output_dir, os.path.splitext(os.path.basename(name))[0] + '_files')
+    resource_dir = os.path.join(output_dir, os.path.splitext(os.path.basename(notebook_path))[0] + '_files')
     if not os.path.exists(resource_dir):
         os.makedirs(resource_dir)
 
@@ -160,7 +160,7 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
     
 notebook_path = 'report_generator.ipynb'
 output_dir = 'docs'
-name = 'test2'
+name = 'test1'
 convert_notebook_to_md(notebook_path, output_dir,name)
 
 # %%
