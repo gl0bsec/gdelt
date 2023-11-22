@@ -11,7 +11,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import json
-
+w
 ## What Country: 
 country = 'Israel'
 country_list = []

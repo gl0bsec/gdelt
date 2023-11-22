@@ -8,7 +8,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-## Assoc locations map
+## Assoc locations mappi
 import geopandas as gpd
 
 def filter_and_count_locations(df, country):

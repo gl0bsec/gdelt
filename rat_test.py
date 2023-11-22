@@ -5,8 +5,11 @@ from zipfile import ZipFile
 from datetime import datetime, timedelta
 import pandas as pd
 import json
+import nbformat
+from nbconvert import MarkdownExporter
+import sys
 from tqdm import tqdm  
-
+#%%
 # Import tqdm for progress bars
 
 def gen_dates(input_date):
@@ -108,10 +111,54 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
 
 
 # Example usage:
-output_file_path = 'gdelt_ISR.json'
-input_date = "07/10/2023"
-locations_regex = 'Israel'  # Adjust the regex pattern as needed
+output_file_path = 'gdelt_mlt.json'
+input_date = "06/06/2014"
+locations_regex = 'Malta'  # Adjust the regex pattern as needed
 
 # themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
 download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
+# %%
+
+def convert_notebook_to_md(notebook_path, output_dir,name):
+    """
+    Convert a Jupyter Notebook to a Markdown file.
+
+    Parameters:
+    notebook_path (str): Path to the Jupyter Notebook file.
+    output_dir (str): Directory where the Markdown file will be saved.
+    """
+    # Load the notebook
+    with open(notebook_path, 'r', encoding='utf-8') as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    # Convert to Markdown
+    md_exporter = MarkdownExporter()
+    body, resources = md_exporter.from_notebook_node(notebook)
+
+    # Create output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Save the Markdown file
+    md_file_path = os.path.join(output_dir, os.path.splitext(os.path.basename(name))[0] + '.md')
+    with open(md_file_path, 'w', encoding='utf-8') as f:
+        f.write(body)
+
+    # Save additional resources like images
+    resource_dir = os.path.join(output_dir, os.path.splitext(os.path.basename(notebook_path))[0] + '_files')
+    if not os.path.exists(resource_dir):
+        os.makedirs(resource_dir)
+
+    for filename, content in resources['outputs'].items():
+        resource_file_path = os.path.join(resource_dir, filename)
+        with open(resource_file_path, 'wb') as f:
+            f.write(content)
+
+    print(f"Converted {notebook_path} to {md_file_path}")    
+    
+notebook_path = 'report_generator.ipynb'
+output_dir = 'docs'
+name = 'test1'
+convert_notebook_to_md(notebook_path, output_dir,name)
+
 # %%

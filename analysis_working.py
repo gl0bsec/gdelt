@@ -1,4 +1,4 @@
-#%%
+
 from networkx.algorithms import community as nx_community
 from datetime import datetime, timedelta
 import matplotlib.style as style
@@ -14,8 +14,6 @@ import numpy as np
 import json
 import os
 
-filtered_df = pd.read_json('gdelt_mta.json')
-df = filtered_df
 # Themes, Orgs and Countries
 
 def generate_visualizations(df, country_name, top_n):
@@ -70,7 +68,7 @@ def generate_visualizations(df, country_name, top_n):
     
     # Countries
     country_tones = []
-    for _, row in filtered_df.iterrows():
+    for _, row in df.iterrows():
         if pd.isna(row['LOCATIONS']) or pd.isna(row['OVERALL_TONE']):
             continue
         locations = row['LOCATIONS'].split(';')
@@ -82,7 +80,7 @@ def generate_visualizations(df, country_name, top_n):
             tone = row['OVERALL_TONE']
             country_tones.append((country_name, tone))
     df_country_tones = pd.DataFrame(country_tones, columns=['Country', 'Tone'])
-    df_country_avg_tone = df_country_tones.groupby('Country')['Tone'].mean().reset_index().sort_values(by='Tone')
+    df_country_avg_tone = df_country_tones.groupby('Country')['Tone'].mean().reset_index().sort_values(by='Tone',ascending=True)
     df_country_count_top20 = df_country_tones['Country'].value_counts().reset_index()
     df_country_count_top20.columns = ['Country', 'Count']
     df_country_count_top20 = df_country_count_top20.nlargest(top_n-1, 'Count')
@@ -140,13 +138,5 @@ def plot_from_dataframe(df, shade_date_str):
 
     # Show the plot
     plt.show()
-
-# Call the function with the DataFrame and a specified date to test it
-
-plot_from_dataframe(filtered_df, '20140606')
-generate_visualizations(filtered_df, None, 30)
-
-#%%
-
 
 
