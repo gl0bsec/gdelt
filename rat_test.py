@@ -140,12 +140,13 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
         os.makedirs(output_dir)
 
     # Save the Markdown file
-    md_file_path = os.path.join(output_dir, os.path.splitext(os.path.basename(name))[0] + '.md')
+    md_file_name = os.path.splitext(os.path.basename(notebook_path))[0] + '.md'
+    md_file_path = os.path.join(output_dir, md_file_name)
     with open(md_file_path, 'w', encoding='utf-8') as f:
         f.write(body)
 
     # Save additional resources like images
-    resource_dir = os.path.join(output_dir, os.path.splitext(os.path.basename(notebook_path))[0] + '_files')
+    resource_dir = os.path.join(output_dir, os.path.splitext(os.path.basename(name))[0] + '_files')
     if not os.path.exists(resource_dir):
         os.makedirs(resource_dir)
 
@@ -154,11 +155,12 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
         with open(resource_file_path, 'wb') as f:
             f.write(content)
 
-    print(f"Converted {notebook_path} to {md_file_path}")    
+    print(f"Converted {notebook_path} to {md_file_path}")
+    
     
 notebook_path = 'report_generator.ipynb'
 output_dir = 'docs'
-name = 'test1'
+name = 'test2'
 convert_notebook_to_md(notebook_path, output_dir,name)
 
 # %%
