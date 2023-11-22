@@ -140,8 +140,7 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
         os.makedirs(output_dir)
 
     # Save the Markdown file
-    md_file_name = os.path.splitext(os.path.basename(name))[0] + '.md'
-    md_file_path = os.path.join(output_dir, md_file_name)
+    md_file_path = os.path.join(output_dir, os.path.splitext(os.path.basename(name))[0] + '.md')
     with open(md_file_path, 'w', encoding='utf-8') as f:
         f.write(body)
 
@@ -155,12 +154,55 @@ def convert_notebook_to_md(notebook_path, output_dir,name):
         with open(resource_file_path, 'wb') as f:
             f.write(content)
 
-    print(f"Converted {notebook_path} to {md_file_path}")
-    
+    print(f"Converted {notebook_path} to {md_file_path}")    
     
 notebook_path = 'report_generator.ipynb'
 output_dir = 'docs'
 name = 'test1'
 convert_notebook_to_md(notebook_path, output_dir,name)
 
+# %%
+def convert_notebook_to_md(notebook_path, output_dir, output_filename):
+    """
+    Convert a Jupyter Notebook to a Markdown file.
+
+    Parameters:
+    notebook_path (str): Path to the Jupyter Notebook file.
+    output_dir (str): Directory where the Markdown file will be saved.
+    output_filename (str): Desired name of the output Markdown file.
+    """
+    # Load the notebook
+    with open(notebook_path, 'r', encoding='utf-8') as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    # Convert to Markdown
+    md_exporter = MarkdownExporter()
+    body, resources = md_exporter.from_notebook_node(notebook)
+
+    # Create output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Save the Markdown file
+    md_file_path = os.path.join(output_dir, output_filename + '.md')
+    with open(md_file_path, 'w', encoding='utf-8') as f:
+        f.write(body)
+
+    # Save additional resources like images
+    resource_dir = os.path.join(output_dir, output_filename + '_files')
+    if not os.path.exists(resource_dir):
+        os.makedirs(resource_dir)
+
+    for filename, content in resources['outputs'].items():
+        resource_file_path = os.path.join(resource_dir, filename)
+        with open(resource_file_path, 'wb') as f:
+            f.write(content)
+
+    print(f"Converted {notebook_path} to {md_file_path}")
+    
+    
+notebook_path = 'report_generator.ipynb'
+output_dir = 'docs'
+name = 'test3'
+convert_notebook_to_md(notebook_path, output_dir,name)
 # %%
