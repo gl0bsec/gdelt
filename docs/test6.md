@@ -19,7 +19,7 @@ aw.plot_from_dataframe(filtered_df, '20140606')
 
 
     
-![png](test6_files/output_3_0.png)
+![viz](test6_files/output_3_0.png)
     
 
 
