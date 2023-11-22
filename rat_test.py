@@ -203,56 +203,9 @@ def convert_notebook_to_md(notebook_path, output_dir, output_filename):
     
 notebook_path = 'report_generator.ipynb'
 output_dir = 'docs'
-name = 'test3'
+name = 'test6'
 convert_notebook_to_md(notebook_path, output_dir,name)
-#%%
-import matplotlib.pyplot as plt
 
-def convert_notebook_to_markdown(input_notebook_path, output_markdown_path, image_base_name="figure"):
-    # Read the Jupyter Notebook
-    with open(input_notebook_path, 'r', encoding='utf-8') as notebook_file:
-        notebook_content = nbformat.read(notebook_file, as_version=4)
-    
-    # Initialize MarkdownExporter
-    markdown_exporter = MarkdownExporter()
-    
-    # Convert the notebook to Markdown format
-    markdown_content, _ = markdown_exporter.from_notebook_node(notebook_content)
-    
-    # Create a directory to store images if it doesn't exist
-    image_dir = "images"
-    os.makedirs(image_dir, exist_ok=True)
-    
-    # Initialize image counter
-    image_count = 1
-    
-    # Iterate through the notebook cells
-    for cell in notebook_content.cells:
-        if cell.cell_type == 'code' and 'matplotlib.pyplot' in cell.source:
-            # Execute code cell with Matplotlib/Seaborn visualization
-            exec(cell.source)
-            
-            # Save the last generated plot as an image
-            img_path = os.path.join(image_dir, f"{image_base_name}_{image_count}.png")
-            plt.savefig(img_path)
-            plt.close()
-            
-            # Append Markdown image reference to the output content
-            markdown_content += f"\n![{image_base_name} {image_count}]({img_path})"
-            
-            # Increment image counter
-            image_count += 1
-    
-    # Write the Markdown content to the output file
-    with open(output_markdown_path, 'w', encoding='utf-8') as markdown_file:
-        markdown_file.write(markdown_content)
-    return 
-
-input_notebook_path = 'report_generator.ipynb'
-output_markdown_path = 'docs/test4.md'
-image_base_name = "figure"
-    
-convert_notebook_to_markdown(input_notebook_path, output_markdown_path, image_base_name)
 
 
 # %%
