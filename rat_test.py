@@ -119,7 +119,7 @@ locations_regex = 'Malta'  # Adjust the regex pattern as needed
 download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
 # %%
 
-def convert_notebook_to_md(notebook_path, output_dir):
+def convert_notebook_to_md(notebook_path, output_dir,name):
     """
     Convert a Jupyter Notebook to a Markdown file.
 
