@@ -47,7 +47,7 @@ def convert_notebook(notebook_path, output_html_path, additional_files=None):
 
 # Example usage of the function
 notebook_path = 'report_generator.ipynb'
-output_html_path = 'docs/israel_test.html'
+output_html_path = 'docs/israel_test1.html'
 # additional_files = ['path_to_additional_file1', 'path_to_additional_file2'] # Optional
 
 # Convert the notebook
@@ -107,7 +107,7 @@ def convert_notebook_hide_code(notebook_path, output_html_path, additional_files
 
 # Example usage of the function
 notebook_path = 'report_generator.ipynb'
-output_html_path = 'docs/israel_test.html'
+output_html_path = 'docs/israel_test2.html'
 # additional_files = ['path_to_additional_file1', 'path_to_additional_file2'] # Optional
 
 # Convert the notebook

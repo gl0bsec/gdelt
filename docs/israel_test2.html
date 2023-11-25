@@ -7483,11 +7483,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">analysis_working</span> <span class="k">as</span> <span class="nn">aw</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
 <span class="c1"># import viz</span>
-<span class="n">filtered_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">'gdelt_mlt.json'</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">filtered_df</span>
+<span class="n">filtered_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">'gdelt_ISR.json'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7500,7 +7498,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Insert-Title">Insert Title<a class="anchor-link" href="#Insert-Title">¶</a></h1>
+<h1 id="Online-news-coverage-leading-up-to-and-following-the-Israel-Hamas-conflict:-A-30-day-timeline">Online news coverage leading up to and following the Israel-Hamas conflict: A 30 day timeline<a class="anchor-link" href="#Online-news-coverage-leading-up-to-and-following-the-Israel-Hamas-conflict:-A-30-day-timeline">¶</a></h1>
 </div>
 </div>
 </div>
@@ -7523,8 +7521,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Call the function with the DataFrame and a specified date to test it</span>
-<span class="n">aw</span><span class="o">.</span><span class="n">plot_from_dataframe</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="s1">'20140606'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">modified_analysis_working</span> <span class="k">as</span> <span class="nn">aw</span>
+<span class="c1"># Call the function with the DataFrame and a specified date to test it</span>
+<span class="n">aw</span><span class="o">.</span><span class="n">plot_from_dataframe</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="s1">'20231007'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7549,7 +7548,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Locations,-Themes-and-Organizations">Locations, Themes and Organizations<a class="anchor-link" href="#Locations,-Themes-and-Organizations">¶</a></h3>
+<h3 id="Themes-and-Organizations">Themes and Organizations<a class="anchor-link" href="#Themes-and-Organizations">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7561,7 +7560,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">aw</span><span class="o">.</span><span class="n">generate_visualizations</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Creating DataFrames for positive and negative tone countries, ordered by count</span>
+<span class="n">excluded_themes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'TAX_FNCACT'</span><span class="p">,</span> <span class="s2">" "</span><span class="p">]</span>
+<span class="n">aw</span><span class="o">.</span><span class="n">generate_visualizations2</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="s1">'Israel'</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">excluded_themes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7574,11 +7575,16 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>c:\Users\Shiva Shah\Desktop\Projects\gdelt\analysis_working.py:53: FutureWarning: 
+<pre>/home/cromwell/Desktop/Projects/SPIR/gdelt/modified_analysis_working.py:100: FutureWarning: 
 
 Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
 
-  barplot_themes_reversed = sns.barplot(x=theme_counts_n, y=theme_names_n, palette=theme_colors_reversed)
+  barplot_themes_reversed = sns.barplot(x=theme_counts_n, y=theme_names_n, palette=theme_colors_reversed, ax=axes[0])
+/home/cromwell/Desktop/Projects/SPIR/gdelt/modified_analysis_working.py:108: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
+
+  barplot_orgs_reversed = sns.barplot(x=org_counts_n, y=org_names_n, palette=org_colors_reversed, ax=axes[1])
 </pre>
 </div>
 </div>
@@ -7588,38 +7594,139 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 <img alt="No description has been provided for this image" class="" src="output_5_1.png"/>
 </div>
 </div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">corrected_locations</span> <span class="k">as</span> <span class="nn">loc</span>
+<span class="n">positive_df</span><span class="p">,</span> <span class="n">negative_df</span> <span class="o">=</span> <span class="n">aw</span><span class="o">.</span><span class="n">create_organization_tone_dataframes_ordered_by_count</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="c1"># Example filter list</span>
+<span class="n">aw</span><span class="o">.</span><span class="n">plot_side_by_side_organization_tones</span><span class="p">(</span><span class="n">positive_df</span><span class="p">,</span><span class="n">negative_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
+<img alt="No description has been provided for this image" class="" src="output_6_0.png"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Location-analytics">Location analytics<a class="anchor-link" href="#Location-analytics">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Plotting the bar charts for the top countries with negative and positive tones, shaded by average tone</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">plot_country_tones</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="n">location_column</span><span class="o">=</span><span class="s1">'LOCATIONS'</span><span class="p">,</span> <span class="n">tone_column</span><span class="o">=</span><span class="s1">'TONE'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>c:\Users\Shiva Shah\Desktop\Projects\gdelt\analysis_working.py:62: FutureWarning: 
-
-Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
-
-  barplot_orgs_reversed = sns.barplot(x=org_counts_n, y=org_names_n, palette=org_colors_reversed)
+<pre>/home/cromwell/Desktop/Projects/SPIR/gdelt/corrected_locations.py:54: FutureWarning: The geopandas.dataset module is deprecated and will be removed in GeoPandas 1.0. You can get the original 'naturalearth_lowres' data from https://www.naturalearthdata.com/downloads/110m-cultural-vectors/.
+  world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
-<img alt="No description has been provided for this image" class="" src="output_5_3.png"/>
+<img alt="No description has been provided for this image" class="" src="output_8_1.png"/>
 </div>
 </div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">loc</span><span class="o">.</span><span class="n">plot_country_frequencies</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="n">location_column</span><span class="o">=</span><span class="s1">'LOCATIONS'</span><span class="p">,</span> <span class="n">contrast_scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>c:\Users\Shiva Shah\Desktop\Projects\gdelt\analysis_working.py:91: FutureWarning: 
-
-Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
-
-  barplot_countries_reversed = sns.barplot(x='Count', y='Country', data=df_country_count_top20, palette=country_colors_reversed)
+<pre>/home/cromwell/Desktop/Projects/SPIR/gdelt/corrected_locations.py:86: FutureWarning: The geopandas.dataset module is deprecated and will be removed in GeoPandas 1.0. You can get the original 'naturalearth_lowres' data from https://www.naturalearthdata.com/downloads/110m-cultural-vectors/.
+  world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
-<img alt="No description has been provided for this image" class="" src="output_5_5.png"/>
+<img alt="No description has been provided for this image" class="" src="output_9_1.png"/>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">positive_df</span><span class="p">,</span> <span class="n">negative_df</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">create_tone_dataframes_ordered_by_count</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">plot_side_by_side_tone_locations</span><span class="p">(</span><span class="n">negative_df</span><span class="p">,</span> <span class="n">positive_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
+<img alt="No description has been provided for this image" class="" src="output_10_0.png"/>
 </div>
 </div>
 </div>
@@ -7635,16 +7742,31 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span> 
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Creating a DataFrame for sources</span>
+<span class="n">sources_df</span> <span class="o">=</span> <span class="n">aw</span><span class="o">.</span><span class="n">create_source_tone_dataframes_ordered_by_count</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span>
+<span class="c1"># Plotting the bar chart for the top sources, shaded by average tone</span>
+<span class="n">aw</span><span class="o">.</span><span class="n">plot_source_counts_shaded_by_tone</span><span class="p">(</span><span class="n">sources_df</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
+<img alt="No description has been provided for this image" class="" src="output_12_0.png"/>
 </div>
 </div>
 </div>
