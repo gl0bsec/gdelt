@@ -117,3 +117,4 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
 
 # themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
 download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
+# %%
