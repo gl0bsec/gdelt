@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use('ggplot')
 standard_palette = sns.color_palette('muted')
-
-
+from itertools import combinations
+import ipysigma
 from networkx.algorithms import community as nx_community
 from datetime import datetime, timedelta
 import matplotlib.style as style
@@ -233,11 +233,6 @@ def plot_side_by_side_organization_tones(positive_df, negative_df):
 # Usage:
 # plot_side_by_side_organization_tones(positive_organizations_df, negative_organizations_df)
 
-
-
-
-
-
 def plot_from_dataframe(df, shade_date_str):
     # Process the DataFrame to calculate the number of entries per day
     df['Date'] = pd.to_datetime(df['DATE'], format='%Y%m%d')
@@ -462,3 +457,96 @@ def plot_source_counts_shaded_by_tone(df, top_n):
     plt.title('Top Sources by Count (Shaded by Average Tone)')
     plt.show()
 
+def create_org_network(gdelt_df, centrality_type='degree', country_codes=None):
+    """
+    Creates a network graph of co-occurring organizations in the GDELT data, 
+    represented as a pandas DataFrame, filtered by specified country codes if provided.
+    Nodes are sized based on the specified centrality measure and colored in a muted dark yellow.
+
+    Parameters:
+    gdelt_df (DataFrame): Pandas DataFrame containing the GDELT data.
+    centrality_type (str): Type of centrality measure ('degree', 'betweenness', 'closeness', 'eigenvector').
+    country_codes (list): List of country codes to filter the data. If None, no filtering is applied.
+    """
+    # Create a NetworkX graph
+    G = nx.Graph()
+
+    # Filter DataFrame by country codes if provided
+    if country_codes:
+        mask = gdelt_df['LOCATIONS'].apply(lambda x: any(country_code in x for country_code in country_codes))
+        filtered_df = gdelt_df[mask]
+    else:
+        filtered_df = gdelt_df
+
+    # Iterate over the DataFrame rows
+    for _, row in filtered_df.iterrows():
+        organizations = row['ORGANIZATIONS']
+        if pd.notna(organizations):
+            orgs = organizations.split(';')
+            for org1, org2 in combinations(orgs, 2):
+                if G.has_edge(org1, org2):
+                    G[org1][org2]['weight'] += 1
+                else:
+                    G.add_edge(org1, org2, weight=1)
+
+    # Calculate specified centrality
+    if centrality_type == 'betweenness':
+        centrality = nx.betweenness_centrality(G)
+    elif centrality_type == 'closeness':
+        centrality = nx.closeness_centrality(G)
+    elif centrality_type == 'eigenvector':
+        centrality = nx.eigenvector_centrality(G, max_iter=1000)
+    else:  # default to degree centrality
+        centrality = nx.degree_centrality(G)
+
+    # Normalize centrality values for sizing nodes
+    max_centrality = max(centrality.values())
+    sizes = [1000 * centrality[node] / max_centrality for node in G.nodes()]  # Adjust node size scale as needed
+
+    # Node color - muted dark yellow
+    node_color = "#DAA520"
+
+    # Visualize the graph using ipysigma with sized nodes
+    sigma = ipysigma.Sigma(G, start_layout=True, node_color=node_color, node_size=sizes)
+    return sigma
+
+
+
+def visualize_top_fncact_tones(gdelt_data, N):
+    """
+    Visualizes the top N functional activities in the GDELT data, color-coded by the sum of the first value of the TONE field.
+    
+    Parameters:
+    gdelt_data (list): List of dictionaries, each representing a GDELT entry.
+    N (int): Number of top functional activities to display.
+    """
+    # Counting functional activities and tone sums
+    fncact_counts = Counter()
+    tone_sums = {}
+    for entry in gdelt_data:
+        themes = entry.get("THEMES")
+        tone = entry.get("TONE")
+        if themes and tone:
+            first_tone_value = float(tone.split(',')[0])
+            for theme in themes.split(';'):
+                if theme.startswith("TAX_FNCACT") and theme != "TAX_FNCACT":
+                    fncact_counts[theme] += 1
+                    tone_sums[theme] = tone_sums.get(theme, 0) + first_tone_value
+
+    # Sorting and selecting top N activities
+    sorted_activities = sorted(fncact_counts, key=fncact_counts.get, reverse=True)[:N]
+    counts = [fncact_counts[activity] for activity in sorted_activities]
+    tones = [tone_sums.get(activity, 0) for activity in sorted_activities]
+
+    # Normalizing tone values for color mapping
+    min_tone, max_tone = min(tones), max(tones)
+    normalized_tones = [(tone - min_tone) / (max_tone - min_tone) if max_tone - min_tone else 0.5 for tone in tones]
+
+    # Creating the color-coded horizontal bar chart
+    plt.figure(figsize=(10, 6))
+    plt.barh(sorted_activities, counts, color=[plt.cm.RdYlBu(tone) for tone in normalized_tones])
+    plt.xlabel('Frequency')
+    plt.ylabel('Functional Activities')
+    plt.title(f'Top {N} Functional Activities with Tone-Color Coding in GDELT Data')
+    plt.gca().invert_yaxis()  # Highest count at the top
+    plt.show()

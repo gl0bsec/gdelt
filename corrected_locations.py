@@ -10,6 +10,9 @@ from collections import Counter
 import geopandas as gpd
 import numpy as np
 import matplotlib.pyplot as plt
+import folium
+from folium.plugins import MarkerCluster
+
 
 def filter_and_count_locations(df, country):
     filtered_df = df[df['LOCATIONS'].str.contains(f'#{country}#', na=False, case=False)]
@@ -450,3 +453,49 @@ def plot_side_by_side_location_tones(positive_df, negative_df, location_type='Lo
     plt.tight_layout()
     plt.show()
 
+
+def create_folium_map(df, column_to_color='Tone', threshold=2000):
+    def extract_locations(df):
+        rows = []
+        for _, record in df.iterrows():
+            tone = record[column_to_color].split(',')[0] if pd.notna(record[column_to_color]) else None
+            tone = float(tone) if tone is not None else None
+
+            if pd.notna(record['LOCATIONS']):
+                locations = record['LOCATIONS'].split(';')
+                for loc in locations:
+                    parts = loc.split('#')
+                    if len(parts) == 7:
+                        _, name, _, _, lat, lon, _ = parts
+                        try:
+                            lat, lon = float(lat), float(lon)
+                            rows.append([name, lat, lon, tone])
+                        except ValueError:
+                            continue
+        return pd.DataFrame(rows, columns=['Name', 'Latitude', 'Longitude', 'Tone'])
+
+    # Extract locations and tones
+    loc_df = extract_locations(df)
+
+    # Create a map
+    map = folium.Map(location=[0, 0], zoom_start=2)
+
+    # Determine if clustering is needed
+    if len(loc_df) > threshold:
+        marker_cluster = MarkerCluster().add_to(map)
+        for_adding_markers = marker_cluster
+    else:
+        for_adding_markers = map
+
+    # Adding markers
+    for _, row in loc_df.iterrows():
+        # Determine the color based on the tone
+        color = 'red' if row['Tone'] < 0 else 'green' if row['Tone'] > 0 else 'gray'
+
+        folium.Marker(
+            location=[row['Latitude'], row['Longitude']],
+            popup=row['Name'],
+            icon=folium.Icon(color=color)
+        ).add_to(for_adding_markers)
+
+    return map
