@@ -10,13 +10,6 @@ from nbconvert import MarkdownExporter
 import sys
 from tqdm import tqdm  
 
-#%%
-# Set parameters
-output_file_path = 'gdelt_mlt.json'
-input_date = "06/06/2014"
-locations_regex = 'Malta'  # Adjust the regex pattern as needed
-
-#%% 
 #Download files 
 def gen_dates(input_date):
     try:
@@ -37,14 +30,14 @@ def gen_dates(input_date):
             succeeding_date = input_date + timedelta(days=i)
             succeeding_dates.append(succeeding_date.strftime("%Y%m%d"))  # Format as yyyymmdd
 
-        return past_dates, succeeding_dates
+        return past_dates, input_date + succeeding_dates
     except ValueError:
         # Handle the case when the input date is not in the correct format
         return [], []
     
 def dates_from(delta,number):
-    end_date = datetime.today() - delta
-    start_date = end_date - number
+    end_date = datetime.today() - timedelta(delta)
+    start_date = end_date - timedelta(number)
 
     print("Downloading GDELT GkG 1.0 files")
     def date_range(start, end):
@@ -53,12 +46,16 @@ def dates_from(delta,number):
         return days
 
     days = [str(day.strftime("%Y%m%d")) for day in date_range(start_date, end_date)]
-    return
+    return days
 
-def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, themes_regex):
+def download_and_filter_gdelt_data(n,output_file_path, input_date, locations_regex, themes_regex):
     try:
         # Generate the date range using the input date
-        past_dates, succeeding_dates = gen_dates(input_date)
+        if n != None:
+            date_range = dates_from(2,n)
+        else:
+            past_dates, succeeding_dates = gen_dates(input_date)
+            date_range = past_dates + succeeding_dates
 
         # Set the directory where the script is located as the working directory
         script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -72,7 +69,7 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
         os.makedirs(temp_dir, exist_ok=True)
 
         # Download, filter, and save GDELT data
-        for day in tqdm(past_dates + succeeding_dates, desc="Downloading GDELT data"):
+        for day in tqdm(date_range, desc="Downloading GDELT data"):
             # Download the file
             day_str = day.replace("/", "")
             url = "http://data.gdeltproject.org/gkg/" + day_str + ".gkg.csv.zip"
@@ -115,6 +112,11 @@ def download_and_filter_gdelt_data(output_file_path, input_date, locations_regex
         print("Invalid date format. Please use 'dd/mm/yyyy'.") 
     return
 
+# Set parameters
+output_file_path = 'gdelt_mea1.json'
+input_date = "06/06/2014"
+locations_regex = 'Israel|Occupied Palestenian Territory'  # Adjust the regex pattern as needed
 # themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
-download_and_filter_gdelt_data(output_file_path, input_date, locations_regex, None)
+download_and_filter_gdelt_data(12,output_file_path, input_date, locations_regex, None)
+
 # %%

@@ -5,6 +5,7 @@ plt.style.use('ggplot')
 standard_palette = sns.color_palette('muted')
 from itertools import combinations
 import ipysigma
+import ipysigma as Sigma
 from networkx.algorithms import community as nx_community
 from datetime import datetime, timedelta
 import matplotlib.style as style
@@ -116,7 +117,6 @@ def generate_visualizations2(df, country_name, top_n, excluded_themes=None):
     plt.show()
 
     return
-
 
 
 
@@ -517,24 +517,30 @@ def visualize_top_fncact_tones(gdelt_data, N):
     Visualizes the top N functional activities in the GDELT data, color-coded by the sum of the first value of the TONE field.
     
     Parameters:
-    gdelt_data (list): List of dictionaries, each representing a GDELT entry.
+    gdelt_data (DataFrame): Pandas DataFrame, each row representing a GDELT entry.
     N (int): Number of top functional activities to display.
     """
-    # Counting functional activities and tone sums
+    # Initializing counters for functional activities and tone sums
     fncact_counts = Counter()
     tone_sums = {}
-    for entry in gdelt_data:
-        themes = entry.get("THEMES")
-        tone = entry.get("TONE")
-        if themes and tone:
-            first_tone_value = float(tone.split(',')[0])
+
+    for _, row in gdelt_data.iterrows():
+        themes = row['THEMES']
+        tone = row['TONE']
+        
+        if pd.notna(themes) and pd.notna(tone):
+            try:
+                first_tone_value = float(tone.split(',')[0])
+            except ValueError:
+                continue
+
             for theme in themes.split(';'):
                 if theme.startswith("TAX_FNCACT") and theme != "TAX_FNCACT":
                     fncact_counts[theme] += 1
                     tone_sums[theme] = tone_sums.get(theme, 0) + first_tone_value
 
     # Sorting and selecting top N activities
-    sorted_activities = sorted(fncact_counts, key=fncact_counts.get, reverse=True)[:N]
+    sorted_activities = [activity for activity, _ in fncact_counts.most_common(N)]
     counts = [fncact_counts[activity] for activity in sorted_activities]
     tones = [tone_sums.get(activity, 0) for activity in sorted_activities]
 
@@ -550,3 +556,112 @@ def visualize_top_fncact_tones(gdelt_data, N):
     plt.title(f'Top {N} Functional Activities with Tone-Color Coding in GDELT Data')
     plt.gca().invert_yaxis()  # Highest count at the top
     plt.show()
+
+def visualize_top_fncact_tones_by_top_countries(gdelt_data, N, top_n_countries):
+    """
+    Produces a grid of visualize_top_fncact_tones plots for the top N countries based on the number of entries in the GDELT data.
+
+    Parameters:
+    gdelt_data (DataFrame): Pandas DataFrame, each row representing a GDELT entry.
+    N (int): Number of top functional activities to display for each country.
+    top_n_countries (int): Number of top countries to display based on the number of entries.
+    """
+    # Extracting country codes
+    gdelt_data['COUNTRY_CODES'] = gdelt_data['LOCATIONS'].str.extractall(r'1#.*?#([A-Z]{2})#').groupby(level=0).first()[0]
+
+    # Filter out rows without a country code
+    gdelt_data = gdelt_data.dropna(subset=['COUNTRY_CODES'])
+
+    # Counting entries per country and selecting the top N countries
+    country_counts = gdelt_data['COUNTRY_CODES'].value_counts()
+    top_countries = country_counts.nlargest(top_n_countries).index
+
+    # Setting up the plot grid
+    num_countries = len(top_countries)
+    num_cols = 2  # Adjust the number of columns as needed
+    num_rows = int(np.ceil(num_countries / num_cols))
+
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, num_rows * 5))
+    axes = axes.flatten()
+
+    for i, country_code in enumerate(top_countries):
+        country_data = gdelt_data[gdelt_data['COUNTRY_CODES'] == country_code]
+
+        # Following the same logic as in the original visualize_top_fncact_tones function
+        fncact_counts = Counter()
+        tone_sums = {}
+
+        for _, row in country_data.iterrows():
+            themes = row['THEMES']
+            tone = row['TONE']
+            
+            if pd.notna(themes) and pd.notna(tone):
+                try:
+                    first_tone_value = float(tone.split(',')[0])
+                except ValueError:
+                    continue
+
+                for theme in themes.split(';'):
+                    if theme.startswith("TAX_FNCACT") and theme != "TAX_FNCACT":
+                        fncact_counts[theme] += 1
+                        tone_sums[theme] = tone_sums.get(theme, 0) + first_tone_value
+
+        # Sorting and selecting top N activities
+        sorted_activities = [activity for activity, _ in fncact_counts.most_common(N)]
+        counts = [fncact_counts[activity] for activity in sorted_activities]
+        tones = [tone_sums.get(activity, 0) for activity in sorted_activities]
+
+        # Normalizing tone values for color mapping
+        min_tone, max_tone = min(tones), max(tones)
+        normalized_tones = [(tone - min_tone) / (max_tone - min_tone) if max_tone - min_tone else 0.5 for tone in tones]
+
+        # Creating the color-coded horizontal bar chart for each country
+        sns.barplot(x=counts, y=sorted_activities, ax=axes[i], palette=plt.cm.RdYlBu(normalized_tones))
+        axes[i].set_title(f'Top {N} Functional Activities in {country_code}')
+        axes[i].set_xlabel('Frequency')
+        axes[i].set_ylabel('Functional Activities')
+
+    # Adjust layout
+    plt.tight_layout()
+    plt.show()
+
+# Usage example:
+# visualize_top_fncact_tones_by_top_countries(gdelt_data, N=5, top_n_countries=10)
+
+def visualize_fncact_network(gdelt_data, country_code):
+    """
+    Visualizes a network of functional actors for a given country code using ipysigma.
+
+    Parameters:
+    gdelt_data (DataFrame): Pandas DataFrame, each row representing a GDELT entry.
+    country_code (str): The country code to filter the data.
+    """
+
+    if country_code != None: 
+        # Extracting country codes
+        gdelt_data['COUNTRY_CODES'] = gdelt_data['LOCATIONS'].str.extractall(r'1#.*?#([A-Z]{2})#').groupby(level=0).first()[0]
+
+        # Filter for the specified country code
+        country_data = gdelt_data[gdelt_data['COUNTRY_CODES'] == country_code]
+    else:
+        country_data = gdelt_data
+
+    # Creating a network graph
+    G = nx.Graph()
+
+    for _, row in country_data.iterrows():
+        themes = row['THEMES']
+        if pd.notna(themes):
+            # Extracting functional actors
+            fncacts = [theme for theme in themes.split(';') if theme.startswith("TAX_FNCACT") and theme != "TAX_FNCACT"]
+            
+            # Adding nodes and edges to the graph
+            for fncact in fncacts:
+                G.add_node(fncact)
+                for other_fncact in fncacts:
+                    if fncact != other_fncact:
+                        G.add_edge(fncact, other_fncact)
+
+    # Visualizing the network graph
+    sigma = Sigma(G)
+    return sigma

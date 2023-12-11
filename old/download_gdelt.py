@@ -68,7 +68,7 @@ with open(output_file_path, "w") as output_file:
 
 print(f"Merged data saved to {output_file_path}")
 # %%
-import sqlite 
+import old.sqlite as sqlite 
 sqlite.load_data('gkg_3.json','atlas.sqlite','gkg_test1')
 
 
