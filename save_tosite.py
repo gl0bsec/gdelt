@@ -54,7 +54,7 @@ output_html_path = 'docs/mea_simple.html'
 converted_html_path = convert_notebook(notebook_path, output_html_path, None)
 print(f"Notebook converted to HTML: {converted_html_path}")
 
-`2#%%
+#%%
 import nbformat
 from nbconvert import HTMLExporter
 from nbconvert.preprocessors import ExecutePreprocessor, ExtractOutputPreprocessor
