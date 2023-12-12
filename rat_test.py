@@ -115,8 +115,8 @@ def download_and_filter_gdelt_data(n,output_file_path, input_date, locations_reg
 # Set parameters
 output_file_path = 'gdelt_mea1.json'
 input_date = "06/06/2014"
-locations_regex = 'Israel|Occupied Palestenian Territory'  # Adjust the regex pattern as needed
+locations_regex = 'Israel|Occupied Palestenian Territory|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
 # themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
-download_and_filter_gdelt_data(12,output_file_path, input_date, locations_regex, None)
+download_and_filter_gdelt_data(31,output_file_path, None, locations_regex, None)
 
 # %%

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use('ggplot')
 standard_palette = sns.color_palette('muted')
+from shapely.geometry import Point
 
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -499,3 +500,53 @@ def create_folium_map(df, column_to_color='Tone', threshold=2000):
         ).add_to(for_adding_markers)
 
     return map
+
+
+def plot_tone_heatmap(df,markersize,alpha):
+    def preprocess_data(df):
+        # Initialize an empty list to store processed rows
+        rows = []
+        for _, record in df.iterrows():
+            # Extract TONE value and take the first value
+            tone = record['TONE'].split(',')[0] if pd.notna(record['TONE']) else None
+            tone = float(tone) if tone is not None else None
+
+            # Extract locations
+            if pd.notna(record['LOCATIONS']):
+                locations = record['LOCATIONS'].split(';')
+                for loc in locations:
+                    parts = loc.split('#')
+                    if len(parts) == 7:
+                        loc_type, name, country_code, region_code, lat, lon, loc_id = parts
+                        try:
+                            lat, lon = float(lat), float(lon)
+                            rows.append([name, country_code, lat, lon, tone])
+                        except ValueError:
+                            continue
+
+        return pd.DataFrame(rows, columns=['Name', 'CountryCode', 'Latitude', 'Longitude', 'Tone'])
+
+    # Preprocess and aggregate the data
+    processed_df = preprocess_data(df)
+    df_agg = processed_df.groupby(['Latitude', 'Longitude', 'CountryCode']).agg({'Tone': 'mean'}).reset_index()
+
+    # Convert to GeoDataFrame
+    gdf = gpd.GeoDataFrame(
+        df_agg, 
+        geometry=df_agg.apply(lambda row: Point(row['Longitude'], row['Latitude']), axis=1)
+    )
+
+    # Inverting the color map
+    cmap_inverted = sns.diverging_palette(20, 220, as_cmap=True)
+
+    # Plotting
+    fig, ax = plt.subplots(1, 1, figsize=(15, 10))
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    world.plot(ax=ax, color='white', edgecolor='black')
+    ax.set_axis_off()
+
+    gdf.plot(column='Tone', ax=ax, legend=True, cmap=cmap_inverted, markersize=markersize, alpha=alpha, legend_kwds={'label': "Average Tone", 'orientation': "horizontal", 'shrink': 0.5, 'location': 'bottom'})
+    plt.title('Average Tone of Locations')
+
+    plt.show()
+# Usage: plot_tone_heatmap(your_dataframe)

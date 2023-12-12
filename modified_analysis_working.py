@@ -99,7 +99,10 @@ def generate_visualizations2(df, country_name, top_n, excluded_themes=None):
 
     # Themes plot
     barplot_themes_reversed = sns.barplot(x=theme_counts_n, y=theme_names_n, palette=theme_colors_reversed, ax=axes[0])
-    axes[0].set_title(f'Top {top_n} Themes Related to {country_name}')
+    if country_name == None: 
+        axes[0].set_title(f'Top {top_n} Themes')
+    else:     
+        axes[0].set_title(f'Top {top_n} Themes Related to {country_name}')
     # Add annotations for themes plot
     for index, p in enumerate(barplot_themes_reversed.patches):
         avg_tone = theme_tones[theme_names_n[index]]
@@ -107,7 +110,10 @@ def generate_visualizations2(df, country_name, top_n, excluded_themes=None):
 
     # Organizations plot
     barplot_orgs_reversed = sns.barplot(x=org_counts_n, y=org_names_n, palette=org_colors_reversed, ax=axes[1])
-    axes[1].set_title(f'Top {top_n} Organizations Related to {country_name}')
+    if country_name == None: 
+        axes[1].set_title(f'Top {top_n} Organisations')
+    else: 
+        axes[1].set_title(f'Top {top_n} Organizations Related to {country_name}')
     # Add annotations for organizations plot
     for index, p in enumerate(barplot_orgs_reversed.patches):
         avg_tone = org_tones[org_names_n[index]]
@@ -117,7 +123,6 @@ def generate_visualizations2(df, country_name, top_n, excluded_themes=None):
     plt.show()
 
     return
-
 
 
 def plot_side_by_side_organization_tones(positive_df, negative_df):
