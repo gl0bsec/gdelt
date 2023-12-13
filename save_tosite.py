@@ -47,9 +47,11 @@ def convert_notebook(notebook_path, output_html_path, additional_files=None):
 
 # Example usage of the function
 notebook_path = 'report_generator.ipynb'
-output_html_path = 'docs/mea_simple.html'
+output_html_path = 'docs/mta_simple.html'
 # additional_files = ['path_to_additional_file1', 'path_to_additional_file2'] # Optional
 
 # Convert the notebook
 converted_html_path = convert_notebook(notebook_path, output_html_path, None)
 print(f"Notebook converted to HTML: {converted_html_path}")
+
+# %%
