@@ -1,4 +1,3 @@
-#%%
 import os
 import urllib.request
 from zipfile import ZipFile
@@ -48,11 +47,11 @@ def dates_from(delta,number):
     days = [str(day.strftime("%Y%m%d")) for day in date_range(start_date, end_date)]
     return days
 
-def download_and_filter_gdelt_data(n,output_file_path, input_date, locations_regex, themes_regex):
+def download_and_filter_gdelt_data(d,n,output_file_path, input_date, locations_regex, themes_regex):
     try:
         # Generate the date range using the input date
         if n != None:
-            date_range = dates_from(2,n)
+            date_range = dates_from(d,n)
         else:
             past_dates, succeeding_dates = gen_dates(input_date)
             date_range = past_dates + succeeding_dates
@@ -112,11 +111,10 @@ def download_and_filter_gdelt_data(n,output_file_path, input_date, locations_reg
         print("Invalid date format. Please use 'dd/mm/yyyy'.") 
     return
 
-# Set parameters
-output_file_path = 'gdelt_mea1.json'
-input_date = "06/06/2014"
-locations_regex = 'Israel|Occupied Palestenian Territory|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
-# themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
-download_and_filter_gdelt_data(31,output_file_path, None, locations_regex, None)
+# # Set parameters
+# output_file_path = '7day_gkg.json'
+# # input_date = "06/06/2014"
+# locations_regex = 'Israel|Occupied Palestenian Territory|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
+# # themes_regex = 'HUMAN_RIGHTS|HUMAN_RIGHTS_'  # Adjust the regex pattern as needed
+# download_and_filter_gdelt_data(7,output_file_path, None, None, None)
 
-# %%
