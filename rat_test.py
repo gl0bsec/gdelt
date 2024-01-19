@@ -32,7 +32,7 @@ def gen_dates(input_date):
         return past_dates, input_date + succeeding_dates
     except ValueError:
         # Handle the case when the input date is not in the correct format
-        return [], []
+        return []+[]
     
 def dates_from(delta,number):
     end_date = datetime.today() - timedelta(delta)
