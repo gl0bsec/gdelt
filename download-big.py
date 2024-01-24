@@ -9,7 +9,8 @@ from tqdm import tqdm
 import data_helpers as el
 import glob
 n = 25
-# k = 1 not in use 
+k = 1 
+#%%
 input_date = None
 locations_regex = None
 # Israel|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
@@ -53,7 +54,7 @@ def dates_from(delta,number):
 
 
 if n != None:
-    date_range = dates_from(1,n)
+    date_range = dates_from(k,n)
 else:
     past_dates, succeeding_dates = gen_dates(input_date)
     date_range = past_dates + succeeding_dates
@@ -100,11 +101,13 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
 
 print('donwloaded all files')
 
+#%%
+
 n_days = list(range(1,n+1))
 filenames = glob.glob("big_dump/*.json")
 for path in filenames:
     print('loading data: '+path)
-    el.create_and_load_es_index(9200, path, 'gkg25')
+    el.create_and_load_es_index(9200, path, '3week_test')
     print('loaded')
     print(' ')
 
