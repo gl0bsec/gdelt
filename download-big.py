@@ -8,13 +8,7 @@ from nbconvert import MarkdownExporter
 from tqdm import tqdm 
 import data_helpers as el
 import glob
-n = 25
-k = 1 
 #%%
-input_date = None
-locations_regex = None
-# Israel|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
-
 def gen_dates(input_date):
     try:
         # Parse the input date string into a datetime object
@@ -52,6 +46,15 @@ def dates_from(delta,number):
     days = [str(day.strftime("%Y%m%d")) for day in date_range(start_date, end_date)]
     return days
 
+#%% 
+n = 3
+k = 1 
+input_date = None
+locations_regex = None
+# 'Malta'
+themes_regex = None
+# 'HUMAN_RIGHTS|HUMAN_RIGHTS_'
+# Israel|Iraq|Saudi Arabia|Yemen|'  # Adjust the regex pattern as needed
 
 if n != None:
     date_range = dates_from(k,n)
@@ -87,8 +90,8 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
     df = pd.read_csv(temp_dir+"/" + day_str + ".gkg.csv", delimiter="\t")
     
     # # Apply optional filters for themes using contains and regex
-    # if themes_regex is not None:
-    #     df = df[df['THEMES'].str.contains(themes_regex, case=False, na=False, regex=True)]
+    if themes_regex is not None:
+        df = df[df['THEMES'].str.contains(themes_regex, case=False, na=False, regex=True)]
 
     # Apply optional filters for locations using contains and regex
     if locations_regex is not None:
@@ -102,12 +105,12 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
 print('donwloaded all files')
 
 #%%
-
+address = "25.4.37.249"
 n_days = list(range(1,n+1))
 filenames = glob.glob("big_dump/*.json")
 for path in filenames:
     print('loading data: '+path)
-    el.create_and_load_es_index(9200, path, '3week_test')
+    el.create_and_load_es_index(address,9200, path, '3week_test')
     print('loaded')
     print(' ')
 

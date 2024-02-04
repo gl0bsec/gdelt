@@ -2,9 +2,9 @@ from elasticsearch import Elasticsearch, helpers
 import json
 from datetime import datetime
 
-def create_and_load_es_index(port, file_path, index_name):
+def create_and_load_es_index(address,port, file_path, index_name):
     es = Elasticsearch(
-        ["https://localhost:" + str(port)],
+        ["https://"+address+":" + str(port)],
         basic_auth=('elastic', '_b2x4M4+wjlfiJVTUPLI'),
         verify_certs=False
     )
