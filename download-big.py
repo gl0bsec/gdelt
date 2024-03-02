@@ -105,7 +105,7 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
 print('donwloaded all files')
 
 #%%
-address = "25.4.37.249"
+address = "localhost"
 n_days = list(range(1,n+1))
 filenames = glob.glob("big_dump/*.json")
 for path in filenames:
