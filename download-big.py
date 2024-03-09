@@ -18,7 +18,6 @@ def gen_dates(input_date):
         past_dates = []
         succeeding_dates = []
 
-        # Generate past dates
         for i in range(15, 0, -1):
             past_date = input_date - timedelta(days=i)
             past_dates.append(past_date.strftime("%Y%m%d"))  # Format as yyyymmdd
@@ -47,7 +46,7 @@ def dates_from(delta,number):
     return days
 
 #%% 
-n = 3
+n = 31
 k = 1 
 input_date = None
 locations_regex = None
@@ -105,12 +104,14 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
 print('donwloaded all files')
 
 #%%
+#2024-02-02,38
+
 address = "localhost"
 n_days = list(range(1,n+1))
 filenames = glob.glob("big_dump/*.json")
 for path in filenames:
     print('loading data: '+path)
-    el.create_and_load_es_index(address,9200, path, '3week_test')
+    el.create_and_load_es_index(address,9200, path, '3week_test','_b2x4M4+wjlfiJVTUPLI')
     print('loaded')
     print(' ')
 

@@ -1,11 +1,13 @@
+#%% 
 from elasticsearch import Elasticsearch, helpers
 import json
 from datetime import datetime
+import pandas as pd 
 
-def create_and_load_es_index(address,port, file_path, index_name):
+def create_and_load_es_index(address,port, file_path, index_name,pwd):
     es = Elasticsearch(
         ["https://"+address+":" + str(port)],
-        basic_auth=('elastic', '_b2x4M4+wjlfiJVTUPLI'),
+        basic_auth=('elastic', pwd),
         verify_certs=False
     )
 
@@ -111,11 +113,11 @@ def create_and_load_es_index(address,port, file_path, index_name):
 # index_name = 'mlt_test2'
 # create_and_load_es_index(9200, file_path, index_name)
 
-def batch_create_and_load_es_index(port, file_path, index_name,batch_size=1000):
+def batch_create_and_load_es_index(port, file_path, index_name,batch_size=1000,pwd):
     # Connect to Elasticsearch instance
     es = Elasticsearch(
         ["https://localhost:" + str(port)],
-        basic_auth=('elastic', '_b2x4M4+wjlfiJVTUPLI'),
+        basic_auth=('elastic', pwd),
         verify_certs=False
     )
 
@@ -225,6 +227,117 @@ def batch_create_and_load_es_index(port, file_path, index_name,batch_size=1000):
             actions.append(action)
 
         print(f"Total entries loaded: {total_entries}")
+
+
+def download_es_index_to_csv(port, passwd, index_name, output_file):
+    # Connect to the Elasticsearch instance
+    es = Elasticsearch(
+        ["https://localhost:" + str(port)],
+        basic_auth=('elastic', passwd),
+        verify_certs=False
+    )
+
+    # Prepare a scan query to retrieve all documents from the specified index
+    query = {"query": {"match_all": {}}}
+    
+    # Use the scan helper to retrieve all documents
+    results = helpers.scan(es, query=query, index=index_name)
+    
+    # Initialize a list to hold the documents
+    documents = []
+
+    # Iterate over the scan results and store each document
+    for result in results:
+        documents.append(result['_source'])
+
+    # Convert the list of documents into a DataFrame
+    df = pd.DataFrame(documents)
+    
+    # Save the DataFrame to a CSV file
+    df.to_csv(output_file, index=False)
+    print(f"Saved {len(df)} documents to '{output_file}'")
+
+# Example usage
+es_instance_url = 9200  # Change this to your Elasticsearch instance URL
+index_name = '3week_test'  # Specify the index name
+output_file = 'es_index_data.csv'  # Specify the path to the output CSV file
+
+download_es_index_to_csv(es_instance_url, index_name, output_file)
+
+
+def download_es_data(port, index_name, output_format, query=None, output_file=None):
+    """
+    Download data from an Elasticsearch instance based on a query and store it as specified.
+    
+    Parameters:
+    es_instance_url (str): URL of the Elasticsearch instance.
+    index_name (str): Name of the index to download data from.
+    output_format (str): Format to store the data ('csv', 'json', or 'dataframe').
+    query (dict): Elasticsearch query for filtering data. If None, downloads entire index.
+    output_file (str): Path to the output file. Required if output_format is 'csv' or 'json'.
+    
+    Returns:
+    pandas.DataFrame: If output_format is 'dataframe', returns the data as a DataFrame.
+    """
+    # Connect to the Elasticsearch instance
+    es = Elasticsearch(
+        ["https://localhost:" + str(port)],
+        basic_auth=('elastic', '_b2x4M4+wjlfiJVTUPLI'),
+        verify_certs=False
+    )
+    # Use a match_all query if none is provided
+    if query is None:
+        query = {"query": {"match_all": {}}}
+    
+    # Use the scan helper to retrieve all documents based on the query
+    results = helpers.scan(es, query=query, index=index_name)
+    
+    # Initialize a list to hold the documents
+    documents = []
+
+    # Iterate over the scan results and store each document
+    for result in results:
+        documents.append(result['_source'])
+
+    # Depending on the desired output format, process the documents accordingly
+    if output_format.lower() == 'csv' or output_format.lower() == 'json':
+        if output_file is None:
+            raise ValueError("output_file is required when output_format is 'csv' or 'json'")
+        
+        # Convert the list of documents into a DataFrame
+        df = pd.DataFrame(documents)
+
+        # Save to the specified format
+        if output_format.lower() == 'csv':
+            df.to_csv(output_file, index=False)
+        elif output_format.lower() == 'json':
+            df.to_json(output_file, orient='records')
+        
+        print(f"Saved {len(df)} documents to '{output_file}' in {output_format.upper()} format.")
+    
+    elif output_format.lower() == 'dataframe':
+        # Return the documents as a DataFrame
+        return pd.DataFrame(documents)
+    else:
+        raise ValueError("output_format must be one of 'csv', 'json', or 'dataframe'")
+
+# # Example usage:
+# es_instance_url = 9200  # Change this to your Elasticsearch instance URL
+# index_name = 'your_index_name'  # Specify the index name
+
+# # To download the entire index as a CSV
+# download_es_data(es_instance_url, index_name, 'csv', output_file='es_data.csv')
+
+# # To download filtered data as a DataFrame
+# query = {
+#     "query": {
+#         "match": {
+#             "your_field": "your_value"
+#         }
+#     }
+# }
+# df = download_es_data(es_instance_url, index_name, 'dataframe', query=query)
+# print(df.head())
 
 # file_path = '7day_gkg.json'
 # index_name = '7day_gkg_test_bruh2'
