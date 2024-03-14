@@ -46,8 +46,8 @@ def dates_from(delta,number):
     return days
 
 #%% 
-n = 31
-k = 1 
+n = 37
+k = 1
 input_date = None
 locations_regex = None
 # 'Malta'
@@ -104,7 +104,7 @@ for day in tqdm(date_range, desc="Downloading GDELT data"):
 print('donwloaded all files')
 
 #%%
-#2024-02-02,38
+#2024-02-02,39
 
 address = "localhost"
 n_days = list(range(1,n+1))

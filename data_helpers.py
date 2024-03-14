@@ -113,7 +113,7 @@ def create_and_load_es_index(address,port, file_path, index_name,pwd):
 # index_name = 'mlt_test2'
 # create_and_load_es_index(9200, file_path, index_name)
 
-def batch_create_and_load_es_index(port, file_path, index_name,batch_size=1000,pwd):
+def batch_create_and_load_es_index(port, file_path, pwd, index_name,batch_size=1000):
     # Connect to Elasticsearch instance
     es = Elasticsearch(
         ["https://localhost:" + str(port)],
@@ -258,11 +258,11 @@ def download_es_index_to_csv(port, passwd, index_name, output_file):
     print(f"Saved {len(df)} documents to '{output_file}'")
 
 # Example usage
-es_instance_url = 9200  # Change this to your Elasticsearch instance URL
-index_name = '3week_test'  # Specify the index name
-output_file = 'es_index_data.csv'  # Specify the path to the output CSV file
+# es_instance_url = 9200  # Change this to your Elasticsearch instance URL
+# index_name = '3week_test'  # Specify the index name
+# output_file = 'es_index_data.csv'  # Specify the path to the output CSV file
 
-download_es_index_to_csv(es_instance_url, index_name, output_file)
+# download_es_index_to_csv(es_instance_url, index_name, output_file)
 
 
 def download_es_data(port, index_name, output_format, query=None, output_file=None):
